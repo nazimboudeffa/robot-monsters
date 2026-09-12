@@ -50,6 +50,24 @@
 
     .hero p { color: var(--muted); margin-top: 6px; }
 
+    /* ---------- About ---------- */
+    .about {
+      max-width: 640px;
+      margin: 0 auto 36px;
+      background: var(--card);
+      border: 1px solid #202a38;
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      padding: 18px 22px;
+      color: var(--muted);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .about strong { color: var(--text); }
+
     /* ---------- Grid ---------- */
     main { padding: 0 24px 48px; }
 
@@ -219,6 +237,16 @@
     <div class="hero">
       <h1>Botmon</h1>
       <p>Explore la collection de petits robots monstres</p>
+    </div>
+    <div class="about">
+      <p>
+        Nous aimerions que ce projet reste <strong>Creative Commons</strong> : chacun est
+        libre de partager et de réutiliser le concept Botmon.
+      </p>
+      <p>
+        Le projet en est à ses débuts — nous <strong>cherchons actuellement des idées</strong>
+        pour le développer. N'hésite pas à partager les tiennes !
+      </p>
     </div>
     <div class="grid" id="grid"></div>
   </main>
