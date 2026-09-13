@@ -153,6 +153,200 @@
             padding: 20px;
         }
     }
+
+    /* ===== Mini-jeu ===== */
+    .mgio {
+        background: #f8f3e8;
+        border: 1px solid #cdbf9f;
+        padding: 20px;
+    }
+
+    .mgstats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .mgstat {
+        background: #e9e1d0;
+        border: 1px solid #c7b795;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .mgstat span {
+        display: block;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #70492d;
+        margin-top: 4px;
+    }
+
+    .mgstat strong {
+        display: block;
+        font-size: 26px;
+        color: #173642;
+    }
+
+    .mgzone {
+        margin-bottom: 12px;
+        padding: 10px 14px;
+        background: #173642;
+        color: #f4e8ce;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .mgzone small {
+        font-weight: normal;
+    }
+
+    .mgchips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .mgchip {
+        padding: 6px 12px;
+        border: 1px solid #c7b795;
+        background: #eee7d8;
+        border-radius: 3px;
+        font-size: 14px;
+        color: #211d18;
+    }
+
+    .mgchip.current {
+        background: #b58a4a;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .mgchip.move {
+        background: #4a6b5d;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .mgchip.move:hover {
+        filter: brightness(1.15);
+    }
+
+    .mgbtn-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .mgbtn {
+        border: none;
+        padding: 10px 16px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 15px;
+        background: #173642;
+        color: #f8f3e8;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .mgbtn:hover {
+        background: #2a4a58;
+    }
+
+    .mgbtn:disabled {
+        background: #b9b2a3;
+        cursor: not-allowed;
+    }
+
+    .mgbtn.exit {
+        background: #70492d;
+    }
+
+    .mgbtn.exit:hover {
+        background: #8a5e3c;
+    }
+
+    .mgenemy {
+        border: 2px solid #70492d;
+        background: #ead8b7;
+        padding: 14px;
+        margin-bottom: 14px;
+    }
+
+    .mgenemy h3 {
+        margin: 0 0 6px;
+    }
+
+    .mgenemy-stats {
+        margin: 4px 0;
+    }
+
+    .mglog {
+        background: #f4eedd;
+        border: 1px dashed #c9bda5;
+        padding: 14px;
+        max-height: 240px;
+        overflow-y: auto;
+        font-size: 15px;
+    }
+
+    .mglog p {
+        margin: 5px 0;
+    }
+
+    .mglog .good {
+        color: #1f5c38;
+    }
+
+    .mglog .bad {
+        color: #802c2c;
+    }
+
+    .mglog .info {
+        color: #70492d;
+    }
+
+    .mgover {
+        border: 3px solid #b58a4a;
+        background: #ead8b7;
+        padding: 16px;
+        text-align: center;
+        font-size: 19px;
+        margin-bottom: 14px;
+    }
+
+    .mg-help {
+        font-size: 15px;
+    }
+
+    .btn-hero {
+        display: inline-block;
+        margin-top: 28px;
+        padding: 14px 30px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #b58a4a, #8a5e3c);
+        color: #fff;
+        font-weight: bold;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 18px;
+        text-decoration: none;
+        letter-spacing: 1px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        transition: transform .15s ease, filter .15s ease;
+    }
+
+    .btn-hero:hover {
+        filter: brightness(1.1);
+        transform: translateY(-2px);
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
 </style>
 
 </head>
@@ -162,6 +356,7 @@
 <header>
     <h1>⚓ Corsaires d'Alger ⚓</h1>
     <p>La Méditerranée est à vous. Si vous osez la parcourir.</p>
+    <a class="btn-hero" href="#mini-jeu">🎮 Jouer en ligne</a>
 </header>
 
 <main>
@@ -546,6 +741,443 @@
 
 
 </section>
+
+<section id="mini-jeu">
+    <h2>🎮 Mini-jeu jouable — À l'abordage !</h2>
+
+    <p>
+        Une version <strong>solo</strong> des règles ci-dessus : incarnez un
+        corsaire, naviguez de zone en zone, attaquez les navires et ramenez
+        votre butin à Alger pour gagner du prestige. Objectif :
+        <strong>20 points de prestige</strong> sans vous faire couler !
+    </p>
+
+    <div class="mgio">
+        <div class="mgstats" id="mgstats"></div>
+
+        <div class="mgzone" id="mgzone"></div>
+
+        <div class="mgchips" id="mgmap"></div>
+
+        <div id="mgenemy"></div>
+
+        <div class="mgbtn-row" id="mgactions"></div>
+
+        <div id="mgover"></div>
+
+        <div class="mglog" id="mglog"><p>Aucun journal pour l'instant.</p></div>
+    </div>
+
+    <p class="mg-help">
+        💡 Rappel des règles adaptées : <strong>Chercher</strong> (1 action) fait
+        apparaître un navire à affronter · <strong>Attaquer</strong> (1 action)
+        lance un round de combat (1D6 + canons ; écart 1–2 : –1 coque adverse,
+        écart 3+ : capture) · <strong>Vendre</strong> (1 action, à Alger)
+        sécurise votre cargaison et rapporte du prestige · Canons du navire : 2.
+        Les navires ennemis disposent de leurs propres coque, équipage et canons.
+    </p>
+</section>
+
+<script>
+(function () {
+    "use strict";
+
+    var ZONES = {
+        "Alger": ["Oran", "Tunis", "Baléares"],
+        "Oran": ["Alger", "Gibraltar"],
+        "Tunis": ["Alger", "Sicile", "Malte"],
+        "Sicile": ["Tunis", "Malte", "Marseille"],
+        "Malte": ["Tunis", "Sicile"],
+        "Marseille": ["Sicile", "Barcelone"],
+        "Barcelone": ["Marseille", "Baléares", "Gibraltar"],
+        "Baléares": ["Alger", "Barcelone"],
+        "Gibraltar": ["Oran", "Atlantique", "Barcelone"],
+        "Atlantique": ["Gibraltar"]
+    };
+
+    var ENEMY_TYPES = {
+        "Petit marchand":      { hull: 2, crew: 2, cannons: 0, cargo: 3,  prestige: 0 },
+        "Gros marchand":       { hull: 3, crew: 3, cannons: 1, cargo: 6,  prestige: 0 },
+        "Navire militaire":    { hull: 4, crew: 4, cannons: 3, cargo: 0,  prestige: 2 },
+        "Convoi exceptionnel": { hull: 4, crew: 4, cannons: 2, cargo: 10, prestige: 0 }
+    };
+
+    var MAX_HULL = 5;
+    var MAX_CREW = 4;
+
+    var elStats = document.getElementById('mgstats');
+    var elZone = document.getElementById('mgzone');
+    var elMap = document.getElementById('mgmap');
+    var elEnemy = document.getElementById('mgenemy');
+    var elActions = document.getElementById('mgactions');
+    var elOver = document.getElementById('mgover');
+    var elLog = document.getElementById('mglog');
+
+    var state;
+
+    function d6() { return 1 + Math.floor(Math.random() * 6); }
+
+    function log(msg, cls) {
+        var p = document.createElement('p');
+        if (cls) { p.className = cls; }
+        p.textContent = msg;
+        elLog.appendChild(p);
+        while (elLog.childNodes.length > 40) {
+            elLog.removeChild(elLog.firstChild);
+        }
+        elLog.scrollTop = elLog.scrollHeight;
+    }
+
+    function randomEncounter() {
+        switch (d6()) {
+            case 1: return null;
+            case 2:
+            case 3: return "Petit marchand";
+            case 4: return "Gros marchand";
+            case 5: return "Navire militaire";
+            default: return "Convoi exceptionnel";
+        }
+    }
+
+    function spawn(type) {
+        var t = ENEMY_TYPES[type];
+        state.enemy = {
+            name: type,
+            hull: t.hull,
+            crew: t.crew,
+            cannons: t.cannons,
+            cargo: t.cargo,
+            prestige: t.prestige
+        };
+    }
+
+    function canAct() {
+        if (state.over) { return false; }
+        if (state.actions <= 0) {
+            log("Plus d'actions : terminez d'abord votre tour.", "info");
+            return false;
+        }
+        return true;
+    }
+
+    function checkWin() {
+        if (state.prestige >= 20) { state.over = "win"; }
+        if (state.hull <= 0) { state.over = "lose"; }
+    }
+
+    function doMove(dest) {
+        if (!canAct()) { return; }
+        if (ZONES[state.zone].indexOf(dest) === -1) { return; }
+        state.actions--;
+        if (state.enemy) {
+            log("⛵ Vous quittez la zone : le navire ennemi s'éloigne sans être attaqué.", "info");
+        }
+        state.enemy = null;
+        state.zone = dest;
+        log("⛵ Cap sur " + dest + ".");
+        render();
+    }
+
+    function doSeek() {
+        if (!canAct()) { return; }
+        state.actions--;
+        var type = randomEncounter();
+        if (!type) {
+            log("🔭 Chercher → Mer calme : rien ne se passe.", "info");
+        } else {
+            spawn(type);
+            log("🔭 Chercher → Un " + type + " est signalé dans la zone !", "bad");
+        }
+        render();
+    }
+
+    function combatRound() {
+        var e = state.enemy;
+        var pRoll = d6() + state.cannons;
+        var eRoll = d6() + e.cannons;
+
+        if (pRoll > eRoll) {
+            var margin = pRoll - eRoll;
+            if (margin >= 3) {
+                log("⚔️ Combat (vous " + pRoll + " vs " + eRoll + ") — grande victoire ! Le " + e.name + " est capturé.", "good");
+                captureEnemy();
+                return;
+            }
+            e.hull--;
+            if (e.hull <= 0) {
+                log("⚔️ Combat (vous " + pRoll + " vs " + eRoll + ") — le " + e.name + " est coulé, mais le butin est perdu.", "info");
+                state.enemy = null;
+            } else {
+                log("⚔️ Combat (vous " + pRoll + " vs " + eRoll + ") — vous touchez le " + e.name + " (-1 coque, reste " + e.hull + ").", "good");
+            }
+        } else if (eRoll > pRoll) {
+            var margin2 = eRoll - pRoll;
+            if (margin2 >= 3) {
+                log("⚔️ Combat (vous " + pRoll + " vs " + eRoll + ") — le " + e.name + " prend le dessus et capture votre navire !", "bad");
+                state.over = "lose";
+                return;
+            }
+            state.hull--;
+            if (state.hull <= 0) {
+                log("⚔️ Votre coque explose ! Le navire coule.", "bad");
+                state.over = "lose";
+                return;
+            }
+            log("⚔️ Combat (vous " + pRoll + " vs " + eRoll + ") — le " + e.name + " riposte : -1 coque (reste " + state.hull + ").", "bad");
+        } else {
+            state.crew--;
+            e.crew--;
+            if (state.crew <= 0) {
+                log("⚔️ Égalité (" + pRoll + ") ! Chaque navire perd 1 équipage. Sans équipage, vous battez en retraite.", "bad");
+                state.enemy = null;
+            } else {
+                log("⚔️ Égalité (" + pRoll + ") ! Chaque navire perd 1 équipage (votre équipage : " + state.crew + ").", "info");
+            }
+        }
+    }
+
+    function captureEnemy() {
+        var e = state.enemy;
+        if (e.cargo > 0) {
+            state.cargo += e.cargo;
+            log("💰 Butin : +" + e.cargo + " richesses en cargaison (non sécurisée tant que vous n'êtes pas à Alger).", "good");
+        }
+        if (e.prestige > 0) {
+            state.prestige += e.prestige;
+            log("⭐ Prestige de gloire : +" + e.prestige + " ⭐.", "good");
+        }
+        state.enemy = null;
+        checkWin();
+    }
+
+    function doAttack() {
+        if (!canAct()) { return; }
+        if (!state.enemy) { return; }
+        if (state.crew <= 0) {
+            log("⚔️ Équipage à zéro : impossible d'attaquer.", "bad");
+            return;
+        }
+        state.actions--;
+        combatRound();
+        render();
+    }
+
+    function doRepair() {
+        if (!canAct()) { return; }
+        if (state.hull >= MAX_HULL) {
+            log("🔧 La coque est déjà au maximum (" + MAX_HULL + ").", "info");
+            return;
+        }
+        if (state.wealth < 2) {
+            log("🔧 2 richesses requises pour réparer.", "bad");
+            return;
+        }
+        state.actions--;
+        state.wealth -= 2;
+        state.hull++;
+        log("🔧 Réparation : -2 richesses, +1 coque (" + state.hull + ").", "good");
+        render();
+    }
+
+    function doRecruit() {
+        if (!canAct()) { return; }
+        if (state.crew >= MAX_CREW) {
+            log("👥 Équipage complet (" + MAX_CREW + ").", "info");
+            return;
+        }
+        if (state.wealth < 2) {
+            log("👥 2 richesses requises pour recruter.", "bad");
+            return;
+        }
+        state.actions--;
+        state.wealth -= 2;
+        state.crew++;
+        log("👥 Recrutement : -2 richesses, +1 équipage (" + state.crew + ").", "good");
+        render();
+    }
+
+    function doSell() {
+        if (!canAct()) { return; }
+        if (state.zone !== "Alger") {
+            log("💰 La vente n'est possible qu'à Alger.", "bad");
+            return;
+        }
+        if (state.cargo <= 0) {
+            log("💰 Aucune cargaison à vendre.", "info");
+            return;
+        }
+        state.actions--;
+        var c = state.cargo;
+        var gain = c + (state.market ? 1 : 0);
+        var star = c >= 10 ? 4 : (c >= 6 ? 2 : 1);
+        state.wealth += gain;
+        state.prestige += star;
+        state.cargo = 0;
+        state.market = false;
+        log("💰 Vente à Alger : " + c + " richesses de cargaison → " + gain + " richesses et +" + star + " ⭐.", "good");
+        checkWin();
+        render();
+    }
+
+    function doEndTurn() {
+        state.turn++;
+        state.actions = 3;
+        var ev = d6();
+        var evText = "🌪️ Événement (fin du tour n°" + state.turn + ") : ";
+        switch (ev) {
+            case 1:
+                if (state.zone !== "Alger") {
+                    state.hull--;
+                    log(evText + "Tempête ! Vous êtes en mer : -1 coque (reste " + state.hull + ").", "bad");
+                    if (state.hull <= 0) {
+                        log("💀 Le navire sombre dans la tempête.", "bad");
+                        state.over = "lose";
+                    }
+                } else {
+                    log(evText + "Tempête, mais à Alger vous êtes à l'abri.", "info");
+                }
+                break;
+            case 2:
+                log(evText + "Mer calme. Aucun effet.", "info");
+                break;
+            case 3:
+                state.market = true;
+                log(evText + "Marché favorable : vos prochaines ventes à Alger rapportent +1.", "good");
+                break;
+            case 4:
+                if (state.prestige > 0) {
+                    state.prestige--;
+                    log(evText + "Espion ! Vous perdez 1 ⭐ de prestige (" + state.prestige + ").", "bad");
+                } else {
+                    log(evText + "Espion chez un rival : aucun effet pour vous.", "info");
+                }
+                break;
+            case 5:
+                var t1 = randomEncounter();
+                if (!t1) {
+                    log(evText + "Patrouille : fouille de la zone, rien à signaler.", "info");
+                } else {
+                    spawn(t1);
+                    log(evText + "Patrouille : un " + t1 + " surgit dans votre zone !", "bad");
+                }
+                break;
+            default:
+                spawn("Convoi exceptionnel");
+                log(evText + "Gros convoi signalé dans votre zone !", "bad");
+        }
+        render();
+    }
+
+    function render() {
+        var canAct = state.over === null && state.actions > 0;
+
+        var stats = [
+            ["❤️", state.hull, "Coque"],
+            ["👥", state.crew, "Équipage"],
+            ["🔫", state.cannons, "Canons"],
+            ["💰", state.wealth, "Richesses"],
+            ["📦", state.cargo, "Cargaison"],
+            ["⭐", state.prestige, "Prestige"],
+            ["🔄", state.turn, "Tour"],
+            ["🎯", state.actions, "Actions"]
+        ];
+        elStats.innerHTML = stats.map(function (s) {
+            return '<div class="mgstat"><strong>' + s[1] + '</strong><span>' + s[2] + '</span></div>';
+        }).join("");
+
+        elZone.innerHTML = '🗺️ Zone actuelle : <span style="font-size:22px">' + state.zone +
+            '</span>' + (state.zone === "Alger" ? ' <small>(port d\'attache — on y vend son butin)</small>' : '');
+
+        var chips = [];
+        Object.keys(ZONES).forEach(function (z) {
+            var adjacent = ZONES[state.zone].indexOf(z) !== -1;
+            if (z === state.zone) {
+                chips.push('<span class="mgchip current">⚓ ' + z + '</span>');
+            } else if (adjacent && canAct) {
+                chips.push('<span class="mgchip move" data-zone="' + z + '">⛵ ' + z + '</span>');
+            } else if (adjacent) {
+                chips.push('<span class="mgchip">⛵ ' + z + '</span>');
+            } else {
+                chips.push('<span class="mgchip">' + z + '</span>');
+            }
+        });
+        elMap.innerHTML = chips.join("");
+        var moves = elMap.querySelectorAll('.mgchip.move');
+        for (var i = 0; i < moves.length; i++) {
+            moves[i].addEventListener('click', function () {
+                doMove(this.getAttribute('data-zone'));
+            });
+        }
+
+        if (state.enemy) {
+            var e = state.enemy;
+            elEnemy.innerHTML =
+                '<div class="mgenemy"><h3>🏴 ' + e.name + ' dans la zone</h3>' +
+                '<div class="mgenemy-stats">❤️ Coque ' + e.hull +
+                ' · 👥 Équipage ' + e.crew +
+                ' · 🔫 Canons ' + e.cannons +
+                (e.cargo > 0 ? ' · 📦 Cargaison ' + e.cargo : ' · 🏆 +' + e.prestige + ' ⭐') +
+                '</div></div>';
+        } else {
+            elEnemy.innerHTML = "";
+        }
+
+        var disabled = state.over !== null || state.actions <= 0;
+        var acts = [];
+        acts.push('<button class="mgbtn" id="aSeek"' + (disabled ? ' disabled' : '') + '>🔭 Chercher</button>');
+        acts.push('<button class="mgbtn exit" id="aAttack"' + (disabled || !state.enemy || state.crew <= 0 ? ' disabled' : '') + '>⚔️ Attaquer</button>');
+        acts.push('<button class="mgbtn" id="aRepair"' + (disabled ? ' disabled' : '') + '>🔧 Réparer (−2💰)</button>');
+        acts.push('<button class="mgbtn" id="aRecruit"' + (disabled ? ' disabled' : '') + '>👥 Recruter (−2💰)</button>');
+        acts.push('<button class="mgbtn" id="aSell"' + (disabled || state.zone !== "Alger" || state.cargo <= 0 ? ' disabled' : '') + '>💰 Vendre</button>');
+        acts.push('<button class="mgbtn" id="aEnd"' + (state.over !== null ? ' disabled' : '') + '>🔄 Terminer le tour</button>');
+        elActions.innerHTML = acts.join("");
+
+        var b;
+        (b = document.getElementById('aSeek')) && b.addEventListener('click', doSeek);
+        (b = document.getElementById('aAttack')) && b.addEventListener('click', doAttack);
+        (b = document.getElementById('aRepair')) && b.addEventListener('click', doRepair);
+        (b = document.getElementById('aRecruit')) && b.addEventListener('click', doRecruit);
+        (b = document.getElementById('aSell')) && b.addEventListener('click', doSell);
+        (b = document.getElementById('aEnd')) && b.addEventListener('click', doEndTurn);
+
+        if (state.over === "win") {
+            elOver.innerHTML = '<div class="mgover">🏆 Victoire ! Vous êtes le <strong>Grand Corsaire d\'Alger</strong> avec ' +
+                state.prestige + ' ⭐ et ' + state.wealth + ' richesses.<br>' +
+                '<button class="mgbtn" id="again">🔄 Recommencer</button></div>';
+        } else if (state.over === "lose") {
+            elOver.innerHTML = '<div class="mgover">💀 <strong>Coulé !</strong> Votre navire a sombré en mer... Le destin vous est contraire.<br>' +
+                '<button class="mgbtn" id="again">🔄 Tenter sa chance à nouveau</button></div>';
+        } else {
+            elOver.innerHTML = "";
+        }
+        var ag = document.getElementById('again');
+        if (ag) { ag.addEventListener('click', newGame); }
+    }
+
+    function newGame() {
+        state = {
+            zone: "Alger",
+            hull: MAX_HULL,
+            crew: MAX_CREW,
+            cannons: 2,
+            wealth: 0,
+            cargo: 0,
+            prestige: 0,
+            turn: 1,
+            actions: 3,
+            enemy: null,
+            market: false,
+            over: null
+        };
+        elLog.innerHTML = "";
+        log("Bienvenue à Alger, capitaine !", "info");
+        log("3 actions par tour. Objectif : 20 ⭐ de prestige.", "info");
+        render();
+    }
+
+    newGame();
+})();
+</script>
 
 </main>
 
