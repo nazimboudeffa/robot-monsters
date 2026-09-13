@@ -3,1415 +3,354 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Robot Monsters — Règles du jeu</title>
+  <title>Jeux de plateau maison</title>
   <style>
     :root {
-      --bg: #0b1020;
-      --panel: #151c33;
-      --panel2: #1d2745;
-      --text: #f5f7ff;
-      --muted: #b8c0d9;
-      --accent: #7c5cff;
-      --accent2: #00d4ff;
-      --green: #35d07f;
-      --orange: #ffad42;
-      --red: #ff5d73;
-      --border: rgba(255,255,255,.10);
+      --bg: #07131a;
+      --panel: rgba(11, 26, 36, 0.86);
+      --panel-strong: #0d2230;
+      --text: #eff8f4;
+      --muted: #b5cbc5;
+      --sand: #ead7ab;
+      --sea: #67d7d1;
+      --ember: #ff8763;
+      --border: rgba(255,255,255,.12);
+      --shadow: 0 22px 60px rgba(0,0,0,.28);
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(124,92,255,.25), transparent 35%),
-        radial-gradient(circle at top right, rgba(0,212,255,.18), transparent 30%),
-        var(--bg);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255,135,99,.22), transparent 30%),
+        radial-gradient(circle at top right, rgba(103,215,209,.22), transparent 32%),
+        linear-gradient(180deg, #0b1b22 0%, #07131a 55%, #091922 100%);
       line-height: 1.6;
+      min-height: 100vh;
     }
 
     header {
-      min-height: 430px;
-      display: grid;
-      place-items: center;
+      padding: 88px 20px 60px;
       text-align: center;
-      padding: 70px 20px;
       position: relative;
       overflow: hidden;
     }
 
-    header::before {
-      content: "⚡";
+    header::before,
+    header::after {
       position: absolute;
-      font-size: 180px;
-      opacity: .06;
-      left: 4%;
-      top: 10%;
-      transform: rotate(-15deg);
+      opacity: .08;
+      font-size: clamp(5rem, 14vw, 10rem);
+    }
+
+    header::before {
+      content: "⚓";
+      left: 6%;
+      top: 30px;
+      transform: rotate(-14deg);
     }
 
     header::after {
       content: "🤖";
-      position: absolute;
-      font-size: 190px;
-      opacity: .07;
-      right: 3%;
-      bottom: -20px;
+      right: 6%;
+      bottom: 10px;
+      transform: rotate(12deg);
     }
 
-    .hero { max-width: 900px; position: relative; z-index: 1; }
+    .hero {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
 
-    .badge {
+    .eyebrow {
       display: inline-block;
-      padding: 7px 14px;
-      border: 1px solid var(--border);
+      padding: 8px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      color: var(--accent2);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--sand);
       font-weight: 700;
       letter-spacing: .04em;
+      text-transform: uppercase;
+      font-size: .85rem;
     }
 
     h1 {
-      font-size: clamp(3rem, 8vw, 6.5rem);
-      line-height: .95;
-      margin: 22px 0 16px;
-      letter-spacing: -0.06em;
-      background: linear-gradient(90deg, #fff, #a9a0ff, #7deaff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      margin: 20px 0 14px;
+      font-size: clamp(3rem, 8vw, 6rem);
+      line-height: .94;
+      letter-spacing: -.05em;
     }
 
-    .subtitle {
-      font-size: clamp(1.1rem, 2vw, 1.4rem);
+    .hero p {
+      max-width: 720px;
+      margin: 0 auto;
       color: var(--muted);
-      max-width: 700px;
-      margin: auto;
+      font-size: clamp(1.05rem, 2vw, 1.25rem);
     }
 
-    .btn-hero {
-      display: inline-block;
-      margin-top: 30px;
-      padding: 15px 32px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--accent), #4a9cff);
-      color: #fff;
-      font-weight: 800;
-      font-size: 1.1rem;
-      text-decoration: none;
-      letter-spacing: .01em;
-      box-shadow: 0 16px 45px rgba(124,92,255,.4);
-      transition: transform .15s ease, box-shadow .15s ease;
-    }
-
-    .btn-hero:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 55px rgba(124,92,255,.55);
-    }
-
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: rgba(11,16,32,.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      overflow-x: auto;
-    }
-
-    nav .nav-inner {
-      max-width: 1150px;
-      margin: auto;
+    .hero-actions {
+      margin-top: 28px;
       display: flex;
-      gap: 8px;
-      padding: 10px 16px;
-      white-space: nowrap;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    nav a {
-      color: var(--muted);
+    .btn {
+      display: inline-block;
+      padding: 14px 24px;
+      border-radius: 999px;
       text-decoration: none;
-      padding: 8px 12px;
-      border-radius: 9px;
-      font-weight: 650;
+      font-weight: 800;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
     }
 
-    nav a:hover {
-      background: var(--panel2);
-      color: white;
+    .btn-primary {
+      background: linear-gradient(135deg, var(--sea), #3fa7da);
+      color: #06202d;
+      box-shadow: 0 16px 44px rgba(103,215,209,.28);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
     }
 
     main {
-      max-width: 1150px;
-      margin: auto;
-      padding: 55px 18px 90px;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 18px 80px;
     }
 
-    section { margin-bottom: 70px; }
-
-    h2 {
+    .section-title {
+      margin: 0 0 12px;
       font-size: clamp(2rem, 4vw, 3rem);
-      margin: 0 0 24px;
       letter-spacing: -.03em;
     }
 
-    h3 { margin-top: 0; }
-
-    .lead {
-      font-size: 1.12rem;
+    .section-lead {
+      max-width: 760px;
+      margin: 0 0 28px;
       color: var(--muted);
-      max-width: 800px;
+      font-size: 1.08rem;
     }
 
-    .grid {
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .game-card {
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -30% auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.05);
+      filter: blur(6px);
+    }
+
+    .game-theme-robots {
+      background:
+        radial-gradient(circle at top right, rgba(124,92,255,.18), transparent 35%),
+        linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+    }
+
+    .game-theme-corsaires {
+      background:
+        radial-gradient(circle at top right, rgba(234,215,171,.18), transparent 35%),
+        linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+    }
+
+    .game-icon {
+      font-size: 2.5rem;
+      margin-bottom: 14px;
+    }
+
+    .game-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.6rem;
+    }
+
+    .meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .game-card p {
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+
+    .game-link {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+      border-bottom: 1px solid transparent;
+    }
+
+    .game-link:hover {
+      border-color: currentColor;
+    }
+
+    .ideas {
+      margin-top: 54px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 16px;
     }
 
-    .card {
-      background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.035));
-      border: 1px solid var(--border);
+    .idea {
+      padding: 18px;
       border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 18px 50px rgba(0,0,0,.16);
-    }
-
-    .card strong { color: white; }
-    .emoji { font-size: 2.2rem; }
-
-    .stat {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .pill {
-      border-radius: 999px;
-      padding: 4px 10px;
-      background: rgba(124,92,255,.16);
-      color: #dcd6ff;
-      font-size: .9rem;
-      font-weight: 700;
-    }
-
-    .monster {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .monster::after {
-      content: "⚙️";
-      position: absolute;
-      right: 12px;
-      top: 8px;
-      opacity: .12;
-      font-size: 4rem;
-    }
-
-    .board {
-      background: #11182b;
-      border: 2px dashed rgba(255,255,255,.16);
-      border-radius: 20px;
-      padding: 22px;
-      overflow-x: auto;
-    }
-
-    .path {
-      display: flex;
-      gap: 10px;
-      min-width: 900px;
-      align-items: center;
-    }
-
-    .case {
-      width: 74px;
-      height: 74px;
-      flex: 0 0 74px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      font-weight: 800;
-      background: var(--panel2);
+      background: var(--panel);
       border: 1px solid var(--border);
-      font-size: .85rem;
-    }
-
-    .case.start { background: rgba(53,208,127,.2); }
-    .case.battle { background: rgba(255,93,115,.18); }
-    .case.garage { background: rgba(255,173,66,.18); }
-    .case.mystery { background: rgba(124,92,255,.2); }
-    .case.arena { background: rgba(0,212,255,.18); }
-
-    .steps {
-      counter-reset: step;
-      display: grid;
-      gap: 15px;
-    }
-
-    .step {
-      counter-increment: step;
-      display: grid;
-      grid-template-columns: 52px 1fr;
-      gap: 15px;
-      align-items: start;
-    }
-
-    .step::before {
-      content: counter(step);
-      width: 52px;
-      height: 52px;
-      display: grid;
-      place-items: center;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--accent), #4a9cff);
-      font-weight: 900;
-      font-size: 1.2rem;
-    }
-
-    .rule {
-      background: var(--panel);
-      border-left: 4px solid var(--accent);
-      border-radius: 10px;
-      padding: 16px 18px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--panel);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
-    th, td {
-      padding: 13px 15px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-
-    th {
-      background: var(--panel2);
-      color: white;
-    }
-
-    .winner {
-      text-align: center;
-      padding: 35px 20px;
-      border: 1px solid rgba(255,215,100,.25);
-      background: linear-gradient(135deg, rgba(255,215,100,.12), rgba(124,92,255,.12));
-      border-radius: 22px;
     }
 
     footer {
+      margin-top: 54px;
       text-align: center;
       color: var(--muted);
-      padding: 35px 18px;
+      padding: 32px 18px 56px;
       border-top: 1px solid var(--border);
     }
 
-    code {
-      background: rgba(0,0,0,.25);
-      padding: 2px 6px;
-      border-radius: 6px;
+    footer a {
+      color: var(--sea);
+      text-decoration: none;
     }
 
-    .sim-controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      margin: 6px 0 16px;
-    }
+    @media (max-width: 700px) {
+      header {
+        padding-top: 74px;
+      }
 
-    .sim-controls label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      color: var(--muted);
-    }
-
-    .sim-controls select,
-    .sim-controls button {
-      background: var(--panel2);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 9px 14px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .sim-controls button:hover { border-color: var(--accent2); }
-
-    .sim-prompt {
-      background: linear-gradient(135deg, rgba(124,92,255,.16), rgba(0,212,255,.10));
-      border: 1px solid rgba(124,92,255,.45);
-      border-radius: 16px;
-      padding: 16px 18px;
-      margin: 0 0 16px;
-    }
-
-    .sim-prompt .sim-q { font-weight: 800; font-size: 1.05rem; margin-bottom: 12px; }
-
-    .sim-prompt .sim-opts { display: flex; flex-wrap: wrap; gap: 10px; }
-
-    .sim-prompt button {
-      background: var(--panel2);
-      color: var(--text);
-      border: 1px solid rgba(124,92,255,.5);
-      border-radius: 10px;
-      padding: 10px 16px;
-      font-size: .95rem;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .sim-prompt button:hover { border-color: var(--accent2); background: #263252; }
-
-    .sim-player.moi { border-color: var(--accent); box-shadow: 0 0 18px rgba(124,92,255,.22); }
-
-    .sim-board {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: 12px 0 20px;
-    }
-
-    .sim-cell {
-      width: 46px;
-      height: 46px;
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      background: var(--panel2);
-      border: 1px solid var(--border);
-      position: relative;
-      font-size: 1rem;
-    }
-
-    .sim-cell .tok {
-      position: absolute;
-      top: 3px;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      border: 1px solid rgba(0,0,0,.5);
-    }
-
-    .sim-layout {
-      display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 18px;
-      align-items: start;
-    }
-
-    .sim-players { display: flex; flex-direction: column; gap: 12px; }
-
-    .sim-player {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px;
-    }
-
-    .sim-player.winner { border-color: var(--orange); box-shadow: 0 0 24px rgba(255,173,66,.25); }
-
-    .sim-player h3 { margin: 0 0 6px; font-size: 1.05rem; }
-    .sim-player .stars { color: var(--orange); }
-
-    .sim-robot {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 6px 0;
-      font-size: .85rem;
-    }
-    .sim-robot .ic { font-size: 1.2rem; }
-    .sim-robot .pv { width: 18px; font-weight: 800; font-size: .8rem; }
-
-    .hpwrap {
-      flex: 1;
-      height: 10px;
-      background: rgba(255,255,255,.08);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-    .hp {
-      height: 100%;
-      background: linear-gradient(90deg, var(--red), var(--orange), var(--green));
-      border-radius: 99px;
-      transition: width .3s;
-    }
-    .sim-robot .stats { color: var(--muted); font-size: .75rem; min-width: 44px; text-align: right; }
-    .sim-robot.ko { opacity: .4; }
-
-    .sim-log {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px 14px;
-      height: 440px;
-      overflow-y: auto;
-      font-size: .9rem;
-      line-height: 1.55;
-    }
-
-    .sim-log div { padding: 2px 6px; border-bottom: 1px dashed rgba(255,255,255,.05); border-left: 3px solid transparent; }
-
-    @media (max-width: 800px) {
-      .sim-layout { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 650px) {
-      header { min-height: 360px; }
-      main { padding-top: 35px; }
-      .card { padding: 18px; }
-      .step { grid-template-columns: 42px 1fr; }
-      .step::before { width: 42px; height: 42px; }
+      .game-card {
+        padding: 20px;
+      }
     }
   </style>
 </head>
-
 <body>
   <header>
     <div class="hero">
-      <span class="badge">🎲 Jeu de plateau • 2 à 4 joueurs • 20–40 min</span>
-      <h1>ROBOT<br>MONSTERS</h1>
-      <p class="subtitle">
-        Explore, capture, améliore et fais combattre tes robots monstres.
-        Collectionne les meilleurs robots et deviens le Robot Master ultime !
+      <span class="eyebrow">Collection de jeux à fabriquer</span>
+      <h1>Des jeux de plateau maison,<br>prêts à explorer</h1>
+      <p>
+        Découvre des jeux simples à mettre en place, pensés pour être joués
+        avec peu de matériel, à la maison ou en classe.
       </p>
-      <a class="btn-hero" href="#simulation">🎮 Jouer en ligne</a>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#jeux">Voir les jeux</a>
+        <a class="btn btn-secondary" href="robots.html">Ouvrir Robot Monsters</a>
+      </div>
     </div>
   </header>
 
-  <nav>
-    <div class="nav-inner">
-      <a href="#but">🎯 But</a>
-      <a href="#plateau">🗺️ Plateau</a>
-      <a href="#robots">🤖 Robots</a>
-      <a href="#capture">🎯 Capture</a>
-      <a href="#combat">⚔️ Combat</a>
-      <a href="#garage">🛠️ Garage</a>
-      <a href="#mystere">❓ Mystère</a>
-      <a href="#arenes">🏆 Arènes</a>
-      <a href="#victoire">👑 Victoire</a>
-      <a href="#simulation">🎮 Simuler</a>
-    </div>
-  </nav>
-
   <main>
-    <section id="but">
-      <h2>🎯 Le but du jeu</h2>
-      <p class="lead">
-        Chaque joueur devient un <strong>Robot Master</strong>. Parcours le plateau,
-        rencontre des Robot Monsters sauvages, capture-les, entraîne ton équipe et
-        affronte les gardiens des Arènes.
+    <section id="jeux">
+      <h2 class="section-title">Les jeux du site</h2>
+      <p class="section-lead">
+        Chaque page détaille les règles, le matériel nécessaire et une façon de jouer
+        rapidement sans passer par une grosse mise en place.
       </p>
 
-      <div class="grid">
-        <div class="card"><div class="emoji">🤖</div><h3>Collectionne</h3><p>Capture des Robot Monsters différents pour construire ton équipe.</p></div>
-        <div class="card"><div class="emoji">⚔️</div><h3>Combats</h3><p>Utilise tes robots et leurs pouvoirs pour battre les adversaires.</p></div>
-        <div class="card"><div class="emoji">🛠️</div><h3>Améliore</h3><p>Répare tes robots et augmente leurs statistiques au Garage.</p></div>
-        <div class="card"><div class="emoji">👑</div><h3>Deviens champion</h3><p>Le premier joueur à obtenir 5 Étoiles de Champion gagne !</p></div>
-      </div>
-    </section>
-
-    <section id="plateau">
-      <h2>🗺️ Fabriquer le plateau</h2>
-      <p class="lead">
-        Pas besoin d'imprimante : dessine simplement environ <strong>30 cases</strong>
-        sur une feuille. Fais un parcours en serpent et mélange les différents types de cases.
-      </p>
-
-      <div class="board">
-        <div class="path">
-          <div class="case start">DÉPART</div>
-          <div class="case">🟢<br>SAUVAGE</div>
-          <div class="case battle">🤖<br>MONSTER</div>
-          <div class="case battle">⚔️<br>COMBAT</div>
-          <div class="case garage">🛠️<br>GARAGE</div>
-          <div class="case mystery">❓<br>MYSTÈRE</div>
-          <div class="case">🟢<br>SAUVAGE</div>
-          <div class="case battle">⚔️<br>COMBAT</div>
-          <div class="case arena">🏆<br>ARÈNE</div>
-          <div class="case">➕<br>...</div>
-        </div>
-      </div>
-
-      <div class="grid" style="margin-top:18px">
-        <div class="card"><strong>🟢 Case Sauvage</strong><p>Lance 1 dé pour déterminer si tu rencontres un robot.</p></div>
-        <div class="card"><strong>🤖 Case Monster</strong><p>Combats immédiatement un Robot Monster sauvage.</p></div>
-        <div class="card"><strong>⚔️ Case Combat</strong><p>Défie un autre joueur.</p></div>
-        <div class="card"><strong>🛠️ Case Garage</strong><p>Répare ou améliore un robot.</p></div>
-        <div class="card"><strong>❓ Case Mystère</strong><p>Lance le dé et découvre un événement.</p></div>
-        <div class="card"><strong>🏆 Case Arène</strong><p>Tente de battre le gardien et gagne une Étoile.</p></div>
-      </div>
-    </section>
-
-    <section id="robots">
-      <h2>🤖 Les Robot Monsters</h2>
-      <p class="lead">Chaque robot possède seulement 3 caractéristiques : PV, ATK et Rareté.</p>
-
-      <div class="grid">
-        <article class="card monster">
-          <div class="emoji">🔥</div>
-          <h3>PYROBOT</h3>
-          <p>Un robot de feu équipé d'un énorme bras lance-flammes.</p>
-          <div class="stat"><span class="pill">❤️ 6 PV</span><span class="pill">⚔️ 3 ATK</span><span class="pill">⭐ Rare 2</span></div>
-          <p><strong>Pouvoir :</strong> Surchauffe — sur un 6 naturel, inflige 2 dégâts.</p>
+      <div class="games">
+        <article class="game-card game-theme-robots">
+          <div class="game-icon">🤖</div>
+          <h3>Robot Monsters</h3>
+          <div class="meta">
+            <span class="pill">2 à 4 joueurs</span>
+            <span class="pill">20 à 40 min</span>
+            <span class="pill">Combat et capture</span>
+          </div>
+          <p>
+            Un jeu de robots à collectionner et améliorer, avec combats, arènes et
+            version jouable contre l'ordinateur directement dans la page.
+          </p>
+          <a class="game-link" href="robots.html">Lire les règles de Robot Monsters →</a>
         </article>
 
-        <article class="card monster">
-          <div class="emoji">⚡</div>
-          <h3>VOLTIK</h3>
-          <p>Petit robot électrique incroyablement rapide.</p>
-          <div class="stat"><span class="pill">❤️ 5 PV</span><span class="pill">⚔️ 4 ATK</span><span class="pill">⭐ Rare 3</span></div>
-          <p><strong>Pouvoir :</strong> Turbo — sur un 6, relance immédiatement.</p>
+        <article class="game-card game-theme-corsaires">
+          <div class="game-icon">⚓</div>
+          <h3>Corsaires d'Alger</h3>
+          <div class="meta">
+            <span class="pill">2 à 4 joueurs</span>
+            <span class="pill">Aventure et stratégie</span>
+            <span class="pill">Navigation et butin</span>
+          </div>
+          <p>
+            Un jeu de course au prestige en Méditerranée, où il faut explorer, attaquer,
+            ramener son butin et rentrer au port au bon moment.
+          </p>
+          <a class="game-link" href="corsaires.html">Lire les règles de Corsaires d'Alger →</a>
         </article>
-
-        <article class="card monster">
-          <div class="emoji">🌿</div>
-          <h3>FERROFLOR</h3>
-          <p>Robot végétal couvert d'une armure métallique.</p>
-          <div class="stat"><span class="pill">❤️ 8 PV</span><span class="pill">⚔️ 2 ATK</span><span class="pill">⭐ Rare 2</span></div>
-          <p><strong>Pouvoir :</strong> Réparation — sur un 6, récupère 1 PV.</p>
-        </article>
-
-        <article class="card monster">
-          <div class="emoji">💧</div>
-          <h3>AQUABOT</h3>
-          <p>Un robot capable de projeter de puissants jets d'eau.</p>
-          <div class="stat"><span class="pill">❤️ 7 PV</span><span class="pill">⚔️ 3 ATK</span><span class="pill">⭐ Rare 2</span></div>
-          <p><strong>Pouvoir :</strong> Bouclier d'eau — sur un 6, annule 1 dégât.</p>
-        </article>
-
-        <article class="card monster">
-          <div class="emoji">👻</div>
-          <h3>GLITCHO</h3>
-          <p>Un robot fantôme qui semble avoir un bug permanent.</p>
-          <div class="stat"><span class="pill">❤️ 4 PV</span><span class="pill">⚔️ 5 ATK</span><span class="pill">⭐ Rare 4</span></div>
-          <p><strong>Pouvoir :</strong> Bug — sur un 6, l'adversaire relance son dé.</p>
-        </article>
-
-        <article class="card monster">
-          <div class="emoji">🐲</div>
-          <h3>MEGADRAGON-X</h3>
-          <p>Un Robot Monster légendaire extrêmement puissant.</p>
-          <div class="stat"><span class="pill">❤️ 10 PV</span><span class="pill">⚔️ 5 ATK</span><span class="pill">⭐ Rare 6</span></div>
-          <p><strong>Pouvoir :</strong> Rayon X — sur un 6, inflige 3 dégâts.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="capture">
-      <h2>🎯 Capturer un Robot Monster</h2>
-      <div class="steps">
-        <div class="step"><div class="rule"><strong>Rencontre :</strong> un Robot Monster sauvage apparaît.</div></div>
-        <div class="step"><div class="rule"><strong>Affaiblis-le :</strong> combats avec l'un de tes robots jusqu'à ce qu'il ait 3 PV ou moins.</div></div>
-        <div class="step"><div class="rule"><strong>Tente la capture :</strong> lance 1 dé. Plus le robot est faible, plus il est facile à capturer.</div></div>
-      </div>
-
-      <table style="margin-top:22px">
-        <thead><tr><th>PV du robot sauvage</th><th>Résultat nécessaire</th></tr></thead>
-        <tbody>
-          <tr><td>3 PV</td><td>🎲 6</td></tr>
-          <tr><td>2 PV</td><td>🎲 5 ou 6</td></tr>
-          <tr><td>1 PV</td><td>🎲 4, 5 ou 6</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section id="combat">
-      <h2>⚔️ Les combats</h2>
-      <div class="card">
-        <h3>Un combat = 1 dé + ATK</h3>
-        <p>
-          Chaque joueur choisit un Robot Monster et lance un dé.
-          Ajoute la statistique <strong>ATK</strong> de ton robot.
-          Le score le plus élevé gagne le round.
-        </p>
-        <p><strong>Le perdant perd 1 PV.</strong></p>
-        <p>
-          <strong>Exemple :</strong> Pyrobot possède 3 ATK et obtient 5.
-          Son score est donc <strong>5 + 3 = 8</strong>.
-          Si l'adversaire obtient 6 avec 2 ATK, il fait 8 : égalité !
-        </p>
-      </div>
-      <p class="lead" style="margin-top:18px">
-        💥 <strong>Règle spéciale :</strong> sur un 6 naturel, le robot peut utiliser son pouvoir spécial.
-      </p>
-    </section>
-
-    <section id="garage">
-      <h2>🛠️ Le Garage</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>🔧 Réparer</h3>
-          <p>Récupère <strong>2 PV</strong> sur l'un de tes robots.</p>
-        </div>
-        <div class="card">
-          <h3>⚙️ Améliorer</h3>
-          <p>Lance 1 dé :</p>
-          <ul>
-            <li>1–2 : aucune amélioration</li>
-            <li>3–4 : +1 PV maximum</li>
-            <li>5 : +1 ATK</li>
-            <li>6 : +1 ATK et +1 PV maximum</li>
-          </ul>
-          <p>Maximum : <strong>+2 ATK</strong> grâce aux améliorations.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="mystere">
-      <h2>❓ Cases Mystère</h2>
-      <table>
-        <thead><tr><th>Dé</th><th>Événement</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>💥 Panne ! Ton robot perd 1 PV.</td></tr>
-          <tr><td>2</td><td>🔋 Batterie ! Récupère 2 PV.</td></tr>
-          <tr><td>3</td><td>⚙️ Pièce détachée ! Gagne une amélioration gratuite.</td></tr>
-          <tr><td>4</td><td>🚀 Radar ! Avance de 3 cases.</td></tr>
-          <tr><td>5</td><td>🤖 Rencontre ! Rencontre immédiatement un Robot Monster.</td></tr>
-          <tr><td>6</td><td>🍀 SUPER CHANCE ! Relance le dé ou tente immédiatement une capture.</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section id="arenes">
-      <h2>🏆 Les Arènes</h2>
-      <p class="lead">Il est conseillé de placer 3 Arènes sur le parcours.</p>
-
-      <div class="grid">
-        <div class="card"><h3>🟢 Rocktron</h3><p>❤️ 8 PV • ⚔️ 3 ATK</p></div>
-        <div class="card"><h3>🔵 Aqua-Titan</h3><p>❤️ 10 PV • ⚔️ 4 ATK</p></div>
-        <div class="card"><h3>🔴 Infern-X</h3><p>❤️ 12 PV • ⚔️ 5 ATK</p></div>
-      </div>
-
-      <p class="lead" style="margin-top:20px">
-        Bats le gardien d'une Arène pour gagner <strong>1 Étoile de Champion ⭐</strong>.
-      </p>
-    </section>
-
-    <section>
-      <h2>👥 Ton équipe</h2>
-      <div class="card">
-        <p>
-          Tu peux posséder autant de Robot Monsters que tu veux, mais ton équipe active
-          ne peut contenir que <strong>3 robots</strong>.
-        </p>
-        <p>
-          Tu peux modifier ton équipe lorsque tu arrives au Garage.
-        </p>
-      </div>
-    </section>
-
-    <section id="victoire">
-      <div class="winner">
-        <div class="emoji">👑</div>
-        <h2>La victoire !</h2>
-        <p>
-          Le premier joueur à obtenir <strong>5 Étoiles de Champion</strong> gagne.
-        </p>
-        <p>
-          ⭐ Pour obtenir la 5e étoile, il doit posséder au moins
-          <strong>3 Robot Monsters différents</strong>.
-        </p>
-        <h3>ROBOT MASTER CHAMPION ! 🏆🤖</h3>
       </div>
     </section>
 
     <section>
-      <h2>⭐ Version simplifiée</h2>
-      <div class="card">
-        <p>Pour les plus jeunes, utilise ces règles :</p>
-        <ul>
-          <li>Chaque robot possède seulement des PV et une ATK.</li>
-          <li>Pas de pouvoirs spéciaux.</li>
-          <li>Pas d'améliorations.</li>
-          <li>Un robot à 2 PV ou moins est capturable sur 5 ou 6.</li>
-          <li>Le premier joueur qui possède 5 robots différents gagne.</li>
-        </ul>
-      </div>
-    </section>
-
-    <section>
-      <h2>🚀 Pour agrandir le jeu</h2>
-      <div class="grid">
-        <div class="card">🧬 <strong>Évolutions</strong><p>Fais évoluer tes robots après certains combats.</p></div>
-        <div class="card">🎴 <strong>Cartes d'objets</strong><p>Ajoute des bonus, soins et équipements.</p></div>
-        <div class="card">💥 <strong>Fusions</strong><p>Combine deux robots pour créer une machine unique.</p></div>
-        <div class="card">👑 <strong>Boss légendaires</strong><p>Ajoute des ennemis beaucoup plus puissants.</p></div>
-        <div class="card">🏟️ <strong>Tournois</strong><p>Organise des combats entre joueurs.</p></div>
-        <div class="card">✏️ <strong>Créations</strong><p>Invente tes propres Robot Monsters avec leurs stats et pouvoirs.</p></div>
-      </div>
-    </section>
-
-    <section id="simulation">
-      <h2>🎮 Jouer contre l'ordinateur</h2>
-      <p class="lead">
-        Deux façons de jouer : contrôle <strong>toi-même</strong> un Robot Master face à
-        tes adversaires IA, ou regarde la partie <strong>entièrement automatique</strong>
-        se dérouler toute seule.
+      <h2 class="section-title">Pourquoi cette page d'accueil</h2>
+      <p class="section-lead">
+        Le site a maintenant plusieurs jeux. Faire de l'index une page d'entrée évite
+        que Robot Monsters soit pris pour l'unique contenu du projet.
       </p>
 
-      <div class="sim-controls">
-        <label>Mode
-          <select id="simMode">
-            <option value="humain" selected>🎮 Toi + IA</option>
-            <option value="auto">🤖 Tout automatique</option>
-          </select>
-        </label>
-        <label>Total joueurs
-          <select id="simPlayers">
-            <option value="3">3</option>
-            <option value="2">2</option>
-            <option value="1">1</option>
-            <option value="4" selected>4</option>
-          </select>
-        </label>
-        <label>Vitesse IA
-          <select id="simSpeed">
-            <option value="0">🐢 Lente</option>
-            <option value="1" selected>▶️ Normale</option>
-            <option value="2">⏩ Rapide</option>
-            <option value="3">🚀 Turbo</option>
-          </select>
-        </label>
-        <button id="simStart">▶ Jouer</button>
-        <button id="simPause">⏸ Pause</button>
-        <button id="simStep">⏭ Pas à pas</button>
-        <button id="simReset">↺ Recommencer</button>
-      </div>
-
-      <div class="sim-prompt" id="simPrompt" style="display:none"></div>
-
-      <div class="sim-board" id="simBoard"></div>
-
-      <div class="sim-layout">
-        <div class="sim-players" id="simPlayersPanel"></div>
-        <div class="sim-log" id="simLog"></div>
+      <div class="ideas">
+        <div class="idea">
+          <strong>Peu de matériel</strong>
+          <p>Des feuilles, un dé, quelques jetons, et la partie peut démarrer.</p>
+        </div>
+        <div class="idea">
+          <strong>Univers variés</strong>
+          <p>Science-fiction, aventure maritime et d'autres thèmes peuvent coexister facilement.</p>
+        </div>
+        <div class="idea">
+          <strong>Pages dédiées</strong>
+          <p>Chaque jeu garde sa propre identité visuelle et ses règles complètes.</p>
+        </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <strong>🤖 ROBOT MONSTERS</strong><br>
-    Un jeu de plateau maison à créer, modifier et partager.<br>
-    <a href="https://creativecommons.org/publicdomain/zero/1.0/" style="color:var(--accent2);text-decoration:none;">
-      🄯 Licence Creative Commons CC0 1.0 — domaine public
-    </a>
+    <strong>Jeux de plateau maison</strong><br>
+    Accueil du site pour explorer Robot Monsters, Corsaires d'Alger et les prochains jeux.<br>
+    <a href="robots.html">Robot Monsters</a> · <a href="corsaires.html">Corsaires d'Alger</a>
   </footer>
-
-<script>
-(function(){
-  'use strict';
-
-  const ROBOTS = [
-    { key:'pyrobot',  name:'PYROBOT',      emoji:'🔥', pv:6,  atk:3 },
-    { key:'voltik',   name:'VOLTIK',       emoji:'⚡', pv:5,  atk:4 },
-    { key:'ferroflor',name:'FERROFLOR',    emoji:'🌿', pv:8,  atk:2 },
-    { key:'aquabot',  name:'AQUABOT',      emoji:'💧', pv:7,  atk:3 },
-    { key:'glitcho',  name:'GLITCHO',      emoji:'👻', pv:4,  atk:5 },
-    { key:'megadragon', name:'MEGADRAGON-X', emoji:'🐲', pv:10, atk:5 }
-  ];
-
-  const POWERS = {
-    pyrobot:    { label:'Surchauffe',   dmg:2 },
-    voltik:     { label:'Turbo',        reroll:true },
-    ferroflor:  { label:'Réparation',   heal:1 },
-    aquabot:    { label:'Bouclier d\'eau', shield:1 },
-    glitcho:    { label:'Bug',          bug:true },
-    megadragon: { label:'Rayon X',      dmg:3 }
-  };
-
-  const ARENAS = [
-    { name:'Rocktron',    emoji:'🟢', pv:8,  atk:3 },
-    { name:'Aqua-Titan',  emoji:'🔵', pv:10, atk:4 },
-    { name:'Infern-X',    emoji:'🔴', pv:12, atk:5 }
-  ];
-
-  const BOARD = [
-    'start','wild','monster','garage','mystery','wild','combat','wild','arena0','mystery',
-    'wild','monster','garage','wild','combat','mystery','monster','arena1','wild','combat',
-    'garage','wild','mystery','monster','wild','combat','arena2','wild','mystery','garage'
-  ];
-
-  const CASE_NAMES = {
-    start:'Départ', wild:'🟢 Sauvage', monster:'🤖 Monster', combat:'⚔️ Combat',
-    garage:'🛠️ Garage', mystery:'❓ Mystère',
-    arena0:'🏆 Rocktron', arena1:'🏆 Aqua-Titan', arena2:'🏆 Infern-X'
-  };
-
-  const CASE_GLYPH = {
-    start:'🚩', wild:'🟢', monster:'🤖', combat:'⚔️',
-    garage:'🛠️', mystery:'❓', arena0:'🏆', arena1:'🏆', arena2:'🏆'
-  };
-
-  const MASTERS = [
-    { name:'Nova',  color:'#7c5cff' },
-    { name:'Pixel', color:'#00d4ff' },
-    { name:'Kira',  color:'#35d07f' },
-    { name:'Volt',  color:'#ffad42' }
-  ];
-
-  const STARS_TO_WIN = 5;
-  const SPEEDS = [
-    { ms:450, n:1 },
-    { ms:200, n:3 },
-    { ms:60,  n:12 },
-    { ms:5,   n:50 }
-  ];
-
-  const $ = id => document.getElementById(id);
-  const roll = () => 1 + Math.floor(Math.random() * 6);
-  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-  const byAtk = (a, b) => (b.atk + b.atkBonus) - (a.atk + a.atkBonus);
-  const push = (...fns) => fns.forEach(f => actions.push(f));
-
-  let players = [], actions = [], turnIdx = -1, turns = 0, totalSteps = 0;
-  let winner = null, running = false, timer = null, speed = SPEEDS[1];
-  let mode = 'humain', pending = null, wasRunning = false;
-  let logEntries = [];
-
-  function mkRobot(def){
-    return { def, name: def.name, pv: def.pv, maxPv: def.pv, atk: def.atk, atkBonus: 0, ko: false };
-  }
-
-  function log(t, c){
-    if(logEntries.length > 800) logEntries.shift();
-    logEntries.push({ t, c });
-  }
-
-  function viewAtk(r){ return r.atk + r.atkBonus; }
-
-  function bestIdx(list){
-    let bi = 0;
-    list.forEach((r, i) => { if (viewAtk(r) > viewAtk(list[bi])) bi = i; });
-    return bi;
-  }
-
-  function ask(p, prompt, options, autoIndex){
-    if (winner) return;
-    if (p && p.isHuman){
-      pending = { prompt, options };
-      wasRunning = running || wasRunning;
-      if (running) pause();
-      render();
-    } else {
-      const i = autoIndex || 0;
-      options[i].fn();
-    }
-  }
-
-  function answer(i){
-    if (!pending) return;
-    const opt = pending.options[i];
-    pending = null;
-    opt.fn();
-    render();
-    if (!pending && wasRunning){ wasRunning = false; start(); }
-  }
-
-  function chooseRobot(p, prompt, cands, cb){
-    if (!cands.length){ cb(null); return; }
-    const opts = cands.map(r => ({
-      label: `${r.def.emoji} ${r.def.name} — ${r.pv}/${r.maxPv} PV · ATK ${viewAtk(r)}`,
-      fn: () => cb(r)
-    }));
-    ask(p, prompt, opts, bestIdx(cands));
-  }
-
-  function pickFighter(p, cb){
-    const cands = p.collection.filter(r => r.pv > 0);
-    chooseRobot(p, '🤖 Quel robot envoyer au combat ?', cands, cb);
-  }
-
-  function oneRound(A, B){
-    let dA = roll(), dB = roll();
-    const pwA = POWERS[A.def.key] || {}, pwB = POWERS[B.def.key] || {};
-    if (pwA.reroll && dA === 6){ const d = roll(); if (d > dA) dA = d; }
-    if (pwA.bug && dA === 6){ dB = roll(); }
-    if (pwB.reroll && dB === 6){ const d = roll(); if (d > dB) dB = d; }
-    if (pwB.bug && dB === 6){ dA = roll(); }
-    let sA = dA + A.atk + A.atkBonus;
-    let sB = dB + B.atk + B.atkBonus;
-    let dmgA = 0, dmgB = 0, info = `${A.def.name} (${dA}+${A.atk + A.atkBonus}=${sA}) vs ${B.def.name} (${dB}+${B.atk + B.atkBonus}=${sB})`;
-    if (dA === 6 && pwA.heal) A.pv = Math.min(A.maxPv, A.pv + pwA.heal);
-    if (dB === 6 && pwB.heal) B.pv = Math.min(B.maxPv, B.pv + pwB.heal);
-    if (sA > sB){
-      dmgB = 1 + (dA === 6 ? (pwA.dmg || 0) : 0);
-      if (dB === 6 && pwB.shield) dmgB = Math.max(0, dmgB - pwB.shield);
-    } else if (sB > sA){
-      dmgA = 1 + (dB === 6 ? (pwB.dmg || 0) : 0);
-      if (dA === 6 && pwA.shield) dmgA = Math.max(0, dmgA - pwA.shield);
-    } else {
-      info += ' → Égalité';
-    }
-    return { dmgA, dmgB, info };
-  }
-
-  function distinct(p){
-    return new Set(p.collection.map(r => r.def.key)).size;
-  }
-
-  function startTurn(p){
-    const alive = p.collection.filter(r => r.pv > 0);
-    if (!alive.length && p.collection.length){
-      const r0 = p.collection[0];
-      r0.pv = r0.maxPv; r0.ko = false;
-      log(`🚑 ${p.name} répare d'urgence ${r0.def.name}`, p.color);
-    }
-    p.team = [...p.collection].filter(r => r.pv > 0).sort(byAtk).slice(0, 3);
-  }
-
-  function resolveCase(p){
-    const t = BOARD[p.pos];
-    if (winner) return;
-    if (t === 'wild') push(() => {
-      if (roll() >= 4){ log('🦖 Un robot sauvage apparaît !', p.color); encounterWild(p); }
-      else log('🍃 Calme plat… pas de rencontre.', p.color);
-    });
-    else if (t === 'monster') push(() => { log('🤖 Combat sauvage imposé !', p.color); encounterWild(p); });
-    else if (t === 'combat') combatPlayer(p);
-    else if (t === 'garage') garage(p);
-    else if (t === 'mystery') push(() => mystery(p));
-    else if (t.indexOf('arena') === 0) arena(p, parseInt(t.charAt(5), 10));
-  }
-
-  function encounterWild(p){
-    const wd = pick(ROBOTS);
-    const W = mkRobot(wd);
-    log(`${p.name} rencontre un ${wd.emoji} ${wd.name} sauvage (${W.pv} PV, ${W.atk} ATK)`, p.color);
-    pickFighter(p, A => {
-      if (!A){ log('Pas de robot disponible…', p.color); return; }
-      const ctx = { A, B: W, rounds: 0 };
-      push(() => wildRound(ctx));
-    });
-  }
-
-  function wildRound(ctx){
-    ctx.rounds++;
-    if (ctx.rounds > 40){ log('Combat sans fin… arrêt.', ctx.A.def.name); return; }
-    const A = ctx.A, B = ctx.B;
-    const owner = players.find(p => p.team.indexOf(A) >= 0 || p.collection.indexOf(A) >= 0) || players[0];
-    const c = owner ? owner.color : null;
-    const { dmgA, dmgB, info } = oneRound(A, B);
-    log(`⚔️ ${info}`, c);
-    A.pv = Math.max(0, A.pv - dmgA);
-    B.pv = Math.max(0, B.pv - dmgB);
-    log(`   ${A.def.name} ${A.pv}/${A.maxPv} — ${B.name} ${B.pv}/${B.maxPv}`, c);
-    if (A.pv <= 0){
-      A.ko = true;
-      log(`💥 ${A.def.name} est K.O. !`, owner ? owner.color : null);
-    } else if (B.pv <= 3 && B.pv > 0){
-      captureDecision(owner, ctx);
-    } else if (B.pv <= 0){
-      log(`🤖 ${B.name} est détruit. Pas de capture.`, c);
-    } else {
-      push(() => wildRound(ctx));
-    }
-  }
-
-  function captureDecision(p, ctx){
-    ask(p, `Le ${ctx.B.def.emoji} ${ctx.B.name} sauvage n'a plus que ${ctx.B.pv} PV. Que faire ?`, [
-      { label: `🫳 Tenter la capture (dé ≥ ${ctx.B.pv === 3 ? 6 : ctx.B.pv === 2 ? '5' : '4'})`, fn: () => tryCapture(p, ctx) },
-      { label: '⚔️ Continuer d\'attaquer', fn: () => push(() => wildRound(ctx)) }
-    ], ctx.B.pv === 1 ? 0 : 1);
-  }
-
-  function tryCapture(p, ctx){
-    const chance = ctx.B.pv === 3 ? [6] : ctx.B.pv === 2 ? [5, 6] : [4, 5, 6];
-    const r = roll();
-    log(`${p.name} tente de capturer ${ctx.B.name} (dé : ${r})…`, p.color);
-    if (chance.indexOf(r) >= 0){
-      log(`🎉 CAPTURÉ ! ${ctx.B.def.emoji} ${ctx.B.name} rejoint ${p.name} !`, p.color);
-      p.collection.push(ctx.B);
-      if (p.team.length < 3) p.team.push(ctx.B);
-      else log(`   (${ctx.B.name} rejoint l'équipe de réserve, équipe active pleine)`, p.color);
-    } else {
-      log(`Capture ratée… ${ctx.B.name} file se cacher.`, p.color);
-    }
-  }
-
-  function combatPlayer(p){
-    const others = players.filter(o => o !== p && o.collection.filter(r => r.pv > 0).length);
-    if (!others.length){ log('Pas d\'adversaire disponible. ⚔️', p.color); return; }
-    if (p.isHuman){
-      ask(p, '⚔️ Tu es sur une case Combat ! Qui défier ?',
-        others.map(o => ({ label: `${o.name} (${o.stars}⭐)`, fn: () => startDuel(p, o) })), 0);
-    } else {
-      const opp = pick(others);
-      log(`⚔️ ${p.name} défie ${opp.name} !`, p.color);
-      startDuel(p, opp);
-    }
-  }
-
-  function startDuel(p, opp){
-    pickFighter(p, A => {
-      pickFighter(opp, B => {
-        if (!A || !B){ log('Combat impossible. ⚔️', p.color); return; }
-        log(`⚔️ Duel : ${p.name} (${A.def.name}) contre ${opp.name} (${B.def.name})`, p.color);
-        const ctx = { A, B, rounds: 0, owners: { A: p, B: opp } };
-        push(() => duelRound(ctx));
-      });
-    });
-  }
-
-  function duelRound(ctx){
-    ctx.rounds++;
-    if (ctx.rounds > 40){ log('Combat sans fin, match nul ⚖️'); return; }
-    const A = ctx.A, B = ctx.B;
-    const { dmgA, dmgB, info } = oneRound(A, B);
-    log(`⚔️ ${info}`, ctx.owners.A.color);
-    A.pv = Math.max(0, A.pv - dmgA);
-    B.pv = Math.max(0, B.pv - dmgB);
-    log(`   ${A.def.name} ${A.pv}/${A.maxPv} — ${B.def.name} ${B.pv}/${B.maxPv}`, ctx.owners.A.color);
-    if (A.pv <= 0){
-      A.ko = true;
-      log(`💥 ${A.def.name} (${ctx.owners.A.name}) est K.O. !`, ctx.owners.A.color);
-    } else if (B.pv <= 0){
-      B.ko = true;
-      log(`💥 ${B.def.name} (${ctx.owners.B.name}) est K.O. !`, ctx.owners.B.color);
-    } else {
-      push(() => duelRound(ctx));
-    }
-  }
-
-  function garage(p){
-    log(`${p.name} entre au Garage 🛠️`, p.color);
-    if (p.isHuman){
-      ask(p, '🛠️ Que veux-tu faire au Garage ?', [
-        { label: '🔧 Réparer un robot (+2 PV)', fn: () => garageRepair(p) },
-        { label: '⚙️ Améliorer un robot (dé aléatoire)', fn: () => garageUpgrade(p) },
-        { label: '🚫 Ne rien faire', fn: () => { log('Rien à faire au Garage.', p.color); startTurn(p); } }
-      ], 0);
-    } else {
-      const injured = p.collection.some(r => r.pv < r.maxPv);
-      if (injured) garageRepair(p);
-      else garageUpgrade(p);
-    }
-  }
-
-  function garageRepair(p){
-    const cands = p.collection.filter(r => r.pv < r.maxPv);
-    if (!cands.length){ log('🔧 Aucune réparation nécessaire.', p.color); startTurn(p); return; }
-    chooseRobot(p, '🔧 Quel robot réparer ?', cands, t => {
-      t.pv = Math.min(t.maxPv, t.pv + 2);
-      t.ko = false;
-      log(`🔧 ${t.def.name} réparé (+2 PV → ${t.pv}/${t.maxPv})`, p.color);
-      startTurn(p);
-    });
-  }
-
-  function garageUpgrade(p){
-    const cands = p.collection.slice();
-    if (!cands.length){ startTurn(p); return; }
-    chooseRobot(p, '⚙️ Quel robot améliorer ?', cands, up => {
-      const r = roll();
-      if (r <= 2) log(`⚙️ Amélioration de ${up.def.name} : échec (dé ${r}).`, p.color);
-      else if (r >= 3 && r <= 4){
-        up.maxPv++; up.pv++;
-        log(`⚙️ ${up.def.name} : +1 PV max (dé ${r}).`, p.color);
-      }
-      else if (r === 5 && up.atkBonus < 2){
-        up.atkBonus++;
-        log(`⚙️ ${up.def.name} : +1 ATK (dé ${r}).`, p.color);
-      }
-      else if (r === 6 && up.atkBonus < 2){
-        up.atkBonus++; up.maxPv++; up.pv++;
-        log(`⚙️ ${up.def.name} : +1 ATK et +1 PV max (dé 6) !`, p.color);
-      }
-      else log(`⚙️ Amélioration sans effet (dé ${r}).`, p.color);
-      startTurn(p);
-    });
-  }
-
-  function mystery(p, depth){
-    depth = depth || 0;
-    const r = roll();
-    log(`${p.name} ❓ Case Mystère — dé : ${r}`, p.color);
-    if (r === 1){
-      const rt = needRobot(p);
-      if (rt){ rt.pv = Math.max(0, rt.pv - 1); log('💥 Panne ! -1 PV.', p.color); }
-    } else if (r === 2){
-      const rt = needRobot(p);
-      if (rt){ rt.pv = Math.min(rt.maxPv, rt.pv + 2); log('🔋 Batterie ! +2 PV.', p.color); }
-    } else if (r === 3){
-      log('⚙️ Pièce détachée !', p.color);
-      freeUpgrade(p);
-    } else if (r === 4){
-      const old = p.pos;
-      p.pos = (p.pos + 3) % BOARD.length;
-      log(`🚀 Radar ! ${p.name} avance 3 cases (${old} → ${p.pos}).`, p.color);
-      push(() => resolveCase(p));
-    } else if (r === 5){
-      log('🤖 Rencontre sauvage imminente !', p.color);
-      encounterWild(p);
-    } else if (p.isHuman){
-      ask(p, '🍀 SUPER CHANCE ! Que choisis-tu ?', [
-        { label: '🎲 Relancer le dé Mystère', fn: () => push(() => mystery(p, depth + 1)) },
-        { label: '🤖 Affronter un robot sauvage', fn: () => encounterWild(p) }
-      ], 0);
-    } else if (depth < 2){
-      log('🍀 SUPER CHANCE ! Relance du dé Mystère…', p.color);
-      push(() => mystery(p, depth + 1));
-    } else {
-      log('🍀 Super chance, mais relance sans fin… on s\'arrête là.', p.color);
-    }
-  }
-
-  function needRobot(p){
-    const cands = p.collection.filter(r => r.pv > 0);
-    return cands.length ? pick(cands) : (p.collection[0] || null);
-  }
-
-  function freeUpgrade(p){
-    const up = p.team[0] || needRobot(p);
-    if (!up) return;
-    if (up.atkBonus < 2){ up.atkBonus++; log(`⚙️ ${up.def.name} : +1 ATK (gratuit).`, p.color); }
-    else { up.maxPv++; up.pv++; log(`⚙️ ${up.def.name} : +1 PV max (gratuit).`, p.color); }
-  }
-
-  function arena(p, idx){
-    const a = ARENAS[idx];
-    if (p.stars >= STARS_TO_WIN) return;
-    if (p.stars >= STARS_TO_WIN - 1 && distinct(p) < 3){
-      log(`⭐ ${p.name} doit capturer <strong>3 robots différents</strong> pour la 5e étoile (${distinct(p)}/3).`, p.color);
-      return;
-    }
-    const G = mkRobot({ key:'guardian_' + idx, name:a.name, emoji:a.emoji, pv:a.pv, atk:a.atk });
-    log(`${p.name} défie le gardien ${a.emoji} ${a.name} (${G.pv} PV, ${G.atk} ATK) !`, p.color);
-    pickFighter(p, A => {
-      if (!A){ log('Pas de robot dispo pour l\'arène. 🏆', p.color); return; }
-      const ctx = { A, B: G, rounds: 0 };
-      push(() => arenaRound(p, ctx));
-    });
-  }
-
-  function arenaRound(p, ctx){
-    ctx.rounds++;
-    if (ctx.rounds > 60){ log('Arène : match nul, on abandonne. 🏆'); return; }
-    const A = ctx.A, B = ctx.B;
-    const { dmgA, dmgB, info } = oneRound(A, B);
-    log(`🏆 ${info}`, p.color);
-    A.pv = Math.max(0, A.pv - dmgA);
-    B.pv = Math.max(0, B.pv - dmgB);
-    log(`   ${A.def.name} ${A.pv}/${A.maxPv} — Gardien ${B.pv}/${B.maxPv}`, p.color);
-    if (B.pv <= 0){
-      p.stars++;
-      log(`🏆⭐ ${p.name} bat ${B.name} et gagne 1 Étoile de Champion ! (${p.stars}/${STARS_TO_WIN})`, p.color);
-      checkWin(p);
-    } else if (A.pv <= 0){
-      A.ko = true;
-      log(`💥 ${A.def.name} est K.O., ${p.name} abandonne l'arène…`, p.color);
-    } else {
-      push(() => arenaRound(p, ctx));
-    }
-  }
-
-  function checkWin(p){
-    if (p.stars >= STARS_TO_WIN){
-      winner = p;
-      log(`👑👑👑 ${p.name} EST LE ROBOT MASTER CHAMPION ! 👑👑👑`, p.color);
-      pause();
-    }
-  }
-
-  function nextTurn(){
-    if (winner) return;
-    turnIdx = (turnIdx + 1) % players.length;
-    const p = players[turnIdx];
-    startTurn(p);
-    if (p.isHuman){
-      ask(p, `🎲 ${p.name} (toi), c'est ton tour !`, [
-        { label: '🎲 Lancer le dé', fn: () => rollAndMove(p) }
-      ], 0);
-    } else {
-      rollAndMove(p);
-    }
-  }
-
-  function rollAndMove(p){
-    if (winner) return;
-    turns++;
-    const r = roll();
-    const old = p.pos;
-    p.pos = (p.pos + r) % BOARD.length;
-    log(`🎲 Tour ${turns} — ${p.name} : dé ${r} → case ${old} → ${p.pos} (${CASE_NAMES[BOARD[p.pos]]})`, p.color);
-    resolveCase(p);
-  }
-
-  function step(){
-    if (winner) return;
-    if (actions.length === 0) nextTurn();
-    if (actions.length === 0) return;
-    const fn = actions.shift();
-    fn();
-    totalSteps++;
-    if (totalSteps > 8000){
-      log('🥱 Partie trop longue… match nul général !');
-      winner = 'draw';
-      pause();
-    }
-  }
-
-  function tick(){
-    for (let i = 0; i < speed.n; i++){
-      if (winner || pending) break;
-      step();
-    }
-    if (winner || pending) pause();
-    render();
-  }
-
-  function reset(){
-    pause();
-    mode = $('simMode').value || 'humain';
-    const nb = Math.min(parseInt($('simPlayers').value, 10) || 4, 4);
-    players = [];
-    for (let i = 0; i < nb; i++){
-      const m = MASTERS[i];
-      const r1 = mkRobot(pick(ROBOTS));
-      players.push({ name:m.name, color:m.color, pos:0, stars:0, collection:[r1], team:[r1], isHuman: mode === 'humain' && i === 0 });
-    }
-    actions = []; turns = 0; totalSteps = 0; winner = null; turnIdx = -1; pending = null; wasRunning = false;
-    logEntries = [];
-    log(mode === 'humain'
-      ? `🎮 Nouvelle partie — toi (${players[0].name}) + ${nb - 1} IA. ${STARS_TO_WIN} ⭐ pour gagner !`
-      : `🎮 Nouvelle partie — ${nb} Robot Masters. ${STARS_TO_WIN} ⭐ pour gagner !`);
-    players.forEach(p => log(`${p.name} démarre avec ${p.team[0].def.emoji} ${p.team[0].def.name}`, p.color));
-    render();
-  }
-
-  function start(){
-    if (!players.length) reset();
-    if (winner) return;
-    if (running) return;
-    if (pending) return;
-    running = true;
-    timer = setInterval(tick, speed.ms);
-  }
-
-  function pause(){
-    running = false;
-    if (timer){ clearInterval(timer); timer = null; }
-  }
-
-  function stepOnce(){
-    pause();
-    if (winner) return;
-    if (pending) return;
-    if (!players.length) reset();
-    step();
-    render();
-  }
-
-  function status(){
-    const si = parseInt($('simSpeed').value, 10) || 1;
-    speed = SPEEDS[Math.min(si, SPEEDS.length - 1)];
-    if (running && timer){ clearInterval(timer); timer = setInterval(tick, speed.ms); }
-  }
-
-  function render(){
-    renderPrompt();
-    renderBoard();
-    renderPlayers();
-    renderLog();
-  }
-
-  function renderPrompt(){
-    const el = $('simPrompt');
-    if (!pending){
-      el.style.display = 'none';
-      el.innerHTML = '';
-      return;
-    }
-    el.style.display = 'block';
-    let h = `<div class="sim-q">${pending.prompt}</div><div class="sim-opts">`;
-    pending.options.forEach((o, i) => { h += `<button data-i="${i}">${o.label}</button>`; });
-    h += '</div>';
-    el.innerHTML = h;
-    Array.prototype.forEach.call(el.querySelectorAll('button'), b => {
-      b.addEventListener('click', () => answer(parseInt(b.getAttribute('data-i'), 10)));
-    });
-  }
-
-  function renderBoard(){
-    const elb = $('simBoard');
-    elb.innerHTML = '';
-    BOARD.forEach((t, i) => {
-      const d = document.createElement('div');
-      d.className = 'sim-cell';
-      d.innerHTML = CASE_GLYPH[t] || '';
-      const who = players.filter(p => p.pos === i);
-      who.forEach((p, k) => {
-        const tok = document.createElement('span');
-        tok.className = 'tok';
-        tok.style.left = (4 + k * 9) + 'px';
-        tok.style.background = p.color;
-        d.appendChild(tok);
-      });
-      elb.appendChild(d);
-    });
-  }
-
-  function renderPlayers(){
-    const elp = $('simPlayersPanel');
-    elp.innerHTML = '';
-    players.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'sim-player' + (winner === p ? ' winner' : '') + (p.isHuman ? ' moi' : '');
-      let html = `<h3 style="color:${p.color}">${p.name}${p.isHuman ? ' <small style="color:var(--muted);font-weight:600">(toi)</small>' : ''} <span class="stars">${'⭐'.repeat(p.stars)}</span></h3>`;
-      html += `<div style="color:var(--muted);font-size:.85rem;margin-bottom:6px">Case ${p.pos} • ${p.stars}/${STARS_TO_WIN} ⭐ • ${distinct(p)} robot(s) différent(s)</div>`;
-      p.team.forEach(r => {
-        const pct = Math.round(r.pv / r.maxPv * 100);
-        html += `<div class="sim-robot${r.pv > 0 ? '' : ' ko'}">
-          <span class="ic">${r.def.emoji}</span>
-          <span class="pv">${r.pv}</span>
-          <div class="hpwrap"><div class="hp" style="width:${pct}%"></div></div>
-          <span class="stats">ATK ${r.atk + r.atkBonus}</span>
-        </div>`;
-      });
-      if (!p.team.length) html += '<div style="color:var(--muted);font-size:.85rem">Aucun robot disponible</div>';
-      card.innerHTML = html;
-      elp.appendChild(card);
-    });
-  }
-
-  function renderLog(){
-    const elL = $('simLog');
-    const atBottom = elL.scrollHeight - elL.scrollTop - elL.clientHeight < 40;
-    const items = logEntries.slice(-180);
-    elL.innerHTML = items.map(e =>
-      `<div style="${e.c ? 'border-left-color:' + e.c : ''}">${e.t}</div>`
-    ).join('');
-    if (atBottom) elL.scrollTop = elL.scrollHeight;
-  }
-
-  $('simStart').addEventListener('click', start);
-  $('simPause').addEventListener('click', () => { pause(); render(); });
-  $('simStep').addEventListener('click', stepOnce);
-  $('simReset').addEventListener('click', reset);
-  $('simPlayers').addEventListener('change', reset);
-  $('simSpeed').addEventListener('change', status);
-  $('simMode').addEventListener('change', reset);
-
-  reset();
-})();
-</script>
-
 </body>
 </html>

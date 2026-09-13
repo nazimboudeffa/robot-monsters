@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corsaires d'Alger — Règles du jeu</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: #eee8dc;
+        color: #211d18;
+        font-family: Georgia, "Times New Roman", serif;
+        line-height: 1.6;
+    }
+
+    header {
+        background: #172b35;
+        color: #f4e8ce;
+        text-align: center;
+        padding: 55px 20px;
+        border-bottom: 8px solid #b58a4a;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 48px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    header p {
+        margin: 10px 0 0;
+        font-size: 20px;
+        font-style: italic;
+    }
+
+    main {
+        max-width: 950px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    section {
+        background: #f8f3e8;
+        margin-bottom: 28px;
+        padding: 28px;
+        border: 1px solid #cdbf9f;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        color: #173642;
+        border-bottom: 2px solid #b58a4a;
+        padding-bottom: 8px;
+    }
+
+    h3 {
+        color: #70492d;
+    }
+
+    .intro {
+        font-size: 19px;
+        text-align: center;
+    }
+
+    .quote {
+        margin: 25px 0;
+        padding: 18px;
+        background: #e8dfcc;
+        border-left: 5px solid #b58a4a;
+        font-style: italic;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .card {
+        padding: 18px;
+        background: #e9e1d0;
+        border: 1px solid #c7b795;
+        text-align: center;
+    }
+
+    .card strong {
+        display: block;
+        font-size: 21px;
+        margin-bottom: 5px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 15px 0;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #c9bda5;
+        text-align: left;
+    }
+
+    th {
+        background: #173642;
+        color: #f8f3e8;
+    }
+
+    tr:nth-child(even) {
+        background: #eee7d8;
+    }
+
+    .important {
+        padding: 18px;
+        background: #ead8b7;
+        border: 2px solid #b58a4a;
+        font-weight: bold;
+    }
+
+    .turn {
+        counter-increment: step;
+        margin: 12px 0;
+        padding: 15px;
+        background: #eee7d8;
+        border-left: 4px solid #70492d;
+    }
+
+    .turn strong {
+        color: #173642;
+    }
+
+    footer {
+        text-align: center;
+        padding: 30px;
+        background: #172b35;
+        color: #f4e8ce;
+    }
+
+    @media (max-width: 600px) {
+        header h1 {
+            font-size: 34px;
+        }
+
+        section {
+            padding: 20px;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<header>
+    <h1>⚓ Corsaires d'Alger ⚓</h1>
+    <p>La Méditerranée est à vous. Si vous osez la parcourir.</p>
+</header>
+
+<main>
+
+<section>
+    <p class="intro">
+        <strong>Corsaires d'Alger</strong> est un jeu de stratégie et d'aventure
+        pour <strong>2 à 4 joueurs</strong>.
+        Chaque joueur dirige une maison de corsaires basée à Alger.
+        Explorez la Méditerranée, capturez des navires, accumulez des richesses
+        et tentez de rentrer au port avant que la chance ne tourne.
+    </p>
+
+```
+<div class="quote">
+    « Le meilleur corsaire n'est pas celui qui prend le plus,
+    mais celui qui revient avec son butin. »
+</div>
+```
+
+</section>
+
+<section>
+    <h2>🎯 But du jeu</h2>
+
+```
+<p>
+    Le premier joueur à atteindre <strong>20 points de prestige</strong>
+    déclenche la fin de la partie.
+</p>
+
+<p>
+    Le joueur possédant le plus de prestige à la fin est nommé
+    <strong>Grand Corsaire d'Alger</strong>.
+</p>
+
+<div class="important">
+    ⚠️ Attention : le butin n'est comptabilisé que lorsqu'il est
+    ramené à Alger. Un navire coulé ou capturé par un adversaire
+    perd tout son butin non sécurisé.
+</div>
+```
+
+</section>
+
+<section>
+    <h2>🧰 Matériel nécessaire</h2>
+
+```
+<div class="grid">
+    <div class="card">
+        <strong>🗺️ 1 feuille</strong>
+        Le plateau
+    </div>
+
+    <div class="card">
+        <strong>🎲 1 D6</strong>
+        Pour les actions et combats
+    </div>
+
+    <div class="card">
+        <strong>✏️ 1 stylo</strong>
+        Pour noter les ressources
+    </div>
+
+    <div class="card">
+        <strong>📜 ~30 papiers</strong>
+        Pour les cartes
+    </div>
+</div>
+
+<p>
+    Des pièces, jetons, cailloux ou boutons peuvent servir à représenter
+    les richesses.
+</p>
+```
+
+</section>
+
+<section>
+    <h2>🗺️ Mise en place</h2>
+
+```
+<p>
+    Dessinez sur une feuille les principales zones de la Méditerranée :
+</p>
+
+<div class="quote">
+    <strong>Alger — Oran — Tunis — Sicile — Malte —
+    Marseille — Barcelone — Baléares — Gibraltar — Atlantique</strong>
+</div>
+
+<p>
+    Chaque joueur dessine ensuite son navire à côté d'Alger.
+</p>
+
+<h3>Votre navire</h3>
+
+<table>
+    <tr>
+        <th>Caractéristique</th>
+        <th>Valeur de départ</th>
+    </tr>
+    <tr>
+        <td>❤️ Coque</td>
+        <td>5</td>
+    </tr>
+    <tr>
+        <td>👥 Équipage</td>
+        <td>4</td>
+    </tr>
+    <tr>
+        <td>💰 Richesse</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>⭐ Prestige</td>
+        <td>0</td>
+    </tr>
+</table>
+```
+
+</section>
+
+<section>
+    <h2>⏳ Déroulement d'un tour</h2>
+
+```
+<p>
+    Le joueur actif dispose de <strong>3 actions</strong>.
+    Il peut effectuer la même action plusieurs fois.
+</p>
+
+<div class="turn">
+    <strong>⛵ Se déplacer</strong><br>
+    Déplacez votre navire vers une zone adjacente.
+</div>
+
+<div class="turn">
+    <strong>🔭 Chercher</strong><br>
+    Lancez 1D6 et consultez le tableau des rencontres.
+</div>
+
+<div class="turn">
+    <strong>⚔️ Attaquer</strong><br>
+    Attaquez un navire présent dans votre zone.
+</div>
+
+<div class="turn">
+    <strong>🔧 Réparer</strong><br>
+    Payez 2 richesses pour récupérer 1 point de coque.
+</div>
+
+<div class="turn">
+    <strong>👥 Recruter</strong><br>
+    Payez 2 richesses pour récupérer 1 membre d'équipage.
+</div>
+
+<div class="turn">
+    <strong>💰 Vendre</strong><br>
+    À Alger uniquement : convertissez votre cargaison en richesse.
+</div>
+```
+
+</section>
+
+<section>
+    <h2>🔭 Explorer la Méditerranée</h2>
+
+```
+<p>
+    Lorsque vous utilisez l'action <strong>Chercher</strong>,
+    lancez 1D6 :
+</p>
+
+<table>
+    <tr>
+        <th>D6</th>
+        <th>Rencontre</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>🌊 Rien ne se passe</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>🚢 Petit marchand</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>🚢 Petit marchand</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>💰 Gros marchand</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>⚔️ Navire militaire</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>🚢 Convoi exceptionnel</td>
+    </tr>
+</table>
+```
+
+</section>
+
+<section>
+    <h2>⚔️ Les combats</h2>
+
+```
+<p>
+    Pour combattre, chaque navire lance <strong>1D6 + son nombre
+    de canons</strong>.
+</p>
+
+<p>
+    Le navire obtenant le résultat le plus élevé remporte le combat.
+</p>
+
+<table>
+    <tr>
+        <th>Écart</th>
+        <th>Résultat</th>
+    </tr>
+    <tr>
+        <td>1–2</td>
+        <td>Le perdant perd 1 point de coque.</td>
+    </tr>
+    <tr>
+        <td>3 ou +</td>
+        <td>Le gagnant capture le navire.</td>
+    </tr>
+    <tr>
+        <td>Égalité</td>
+        <td>Chaque navire perd 1 équipage.</td>
+    </tr>
+</table>
+
+<div class="important">
+    Un navire sans équipage ne peut plus attaquer.
+    Un navire à 0 coque est coulé et disparaît de la partie.
+</div>
+```
+
+</section>
+
+<section>
+    <h2>💰 Le butin</h2>
+
+```
+<h3>Petit marchand</h3>
+<p>
+    Réussir l'abordage rapporte <strong>3 richesses</strong>.
+</p>
+
+<h3>Gros marchand</h3>
+<p>
+    Réussir l'abordage rapporte <strong>6 richesses</strong>.
+</p>
+
+<h3>Convoi exceptionnel</h3>
+<p>
+    Réussir l'abordage rapporte <strong>10 richesses</strong>.
+</p>
+
+<p>
+    Le butin reste cependant <strong>non sécurisé</strong> tant que
+    le corsaire n'est pas revenu à Alger.
+</p>
+```
+
+</section>
+
+<section>
+    <h2>🏴‍☠️ Prestige</h2>
+
+```
+<p>
+    Lorsque vous ramenez votre butin à Alger, vous gagnez du prestige.
+</p>
+
+<table>
+    <tr>
+        <th>Butin ramené</th>
+        <th>Prestige</th>
+    </tr>
+    <tr>
+        <td>3 richesses</td>
+        <td>+1 ⭐</td>
+    </tr>
+    <tr>
+        <td>6 richesses</td>
+        <td>+2 ⭐</td>
+    </tr>
+    <tr>
+        <td>10 richesses</td>
+        <td>+4 ⭐</td>
+    </tr>
+</table>
+```
+
+</section>
+
+<section>
+    <h2>🌪️ Événements</h2>
+
+```
+<p>
+    À la fin de chaque tour complet, lancez 1D6 :
+</p>
+
+<table>
+    <tr>
+        <th>D6</th>
+        <th>Événement</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>🌪️ Tempête : chaque navire en mer perd 1 coque.</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>🌊 Mer calme : aucun effet.</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>💰 Marché favorable : les ventes à Alger rapportent +1.</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>🕵️ Espion : le joueur en tête perd 1 prestige.</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>⚔️ Patrouille : lancez une nouvelle rencontre.</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>🚢 Gros convoi : un convoi apparaît dans une zone choisie.</td>
+    </tr>
+</table>
+```
+
+</section>
+
+<section>
+    <h2>🏆 Fin de partie</h2>
+
+```
+<p>
+    Dès qu'un joueur atteint <strong>20 points de prestige</strong>,
+    terminez le tour en cours afin que tous les joueurs aient joué
+    le même nombre de tours.
+</p>
+
+<p>
+    Le joueur avec le plus de prestige devient
+    <strong>Grand Corsaire d'Alger</strong>.
+</p>
+
+<div class="quote">
+    En cas d'égalité, le joueur possédant le plus de richesses
+    l'emporte. Si l'égalité persiste, les joueurs partagent la victoire.
+</div>
+```
+
+</section>
+
+<section>
+    <h2>📜 Règle d'or</h2>
+
+```
+<div class="important">
+    Le jeu doit rester rapide et amusant.
+    Si une situation n'est pas prévue par ces règles,
+    les joueurs se mettent d'accord et continuent la partie.
+    Notez ensuite la nouvelle règle pour votre prochaine partie.
+</div>
+```
+
+</section>
+
+</main>
+
+<footer>
+    ⚓ Corsaires d'Alger ⚓<br>
+    Prototype de jeu de plateau — Version 0.1<br>
+    <a href="index.html" style="color:#f4e8ce;">Retour à l'accueil</a> ·
+    <a href="robots.html" style="color:#f4e8ce;">Voir Robot Monsters</a>
+</footer>
+
+</body>
+</html>
