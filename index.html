@@ -1,384 +1,595 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Botmon</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robot Monsters — Règles du jeu</title>
   <style>
     :root {
-      color-scheme: dark;
-      --bg: #0b0f16;
-      --card: #151a24;
-      --card-hover: #1b2230;
-      --text: #e8edf5;
-      --muted: #8b97a9;
-      --accent: #ffd23c;
+      --bg: #0b1020;
+      --panel: #151c33;
+      --panel2: #1d2745;
+      --text: #f5f7ff;
+      --muted: #b8c0d9;
+      --accent: #7c5cff;
+      --accent2: #00d4ff;
+      --green: #35d07f;
+      --orange: #ffad42;
+      --red: #ff5d73;
+      --border: rgba(255,255,255,.10);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
-      background: var(--bg);
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(124,92,255,.25), transparent 35%),
+        radial-gradient(circle at top right, rgba(0,212,255,.18), transparent 30%),
+        var(--bg);
       color: var(--text);
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      min-height: 100vh;
+      line-height: 1.6;
     }
 
-    /* ---------- Top bar ---------- */
-    .topbar {
-      padding: 16px 24px;
-      border-bottom: 1px solid #1f2734;
-      background: linear-gradient(180deg, #121826, #0b0f16);
-      position: sticky;
-      top: 0;
-      z-index: 10;
+    header {
+      min-height: 430px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 70px 20px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .logo { font-weight: 700; font-size: 18px; letter-spacing: 0.5px; }
+    header::before {
+      content: "⚡";
+      position: absolute;
+      font-size: 180px;
+      opacity: .06;
+      left: 4%;
+      top: 10%;
+      transform: rotate(-15deg);
+    }
 
-    /* ---------- Hero ---------- */
-    .hero { text-align: center; padding: 40px 16px 24px; }
+    header::after {
+      content: "🤖";
+      position: absolute;
+      font-size: 190px;
+      opacity: .07;
+      right: 3%;
+      bottom: -20px;
+    }
 
-    .hero h1 {
-      font-size: 42px;
-      letter-spacing: -1px;
-      background: linear-gradient(90deg, var(--accent), #7cc7ff);
+    .hero { max-width: 900px; position: relative; z-index: 1; }
+
+    .badge {
+      display: inline-block;
+      padding: 7px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      color: var(--accent2);
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      line-height: .95;
+      margin: 22px 0 16px;
+      letter-spacing: -0.06em;
+      background: linear-gradient(90deg, #fff, #a9a0ff, #7deaff);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
 
-    .hero p { color: var(--muted); margin-top: 6px; }
-
-    /* ---------- About ---------- */
-    .about {
-      max-width: 640px;
-      margin: 0 auto 36px;
-      background: var(--card);
-      border: 1px solid #202a38;
-      border-left: 4px solid var(--accent);
-      border-radius: 12px;
-      padding: 18px 22px;
+    .subtitle {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
       color: var(--muted);
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      max-width: 700px;
+      margin: auto;
     }
 
-    .about strong { color: var(--text); }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(11,16,32,.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
 
-    /* ---------- Grid ---------- */
-    main { padding: 0 24px 48px; }
+    nav .nav-inner {
+      max-width: 1150px;
+      margin: auto;
+      display: flex;
+      gap: 8px;
+      padding: 10px 16px;
+      white-space: nowrap;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 9px;
+      font-weight: 650;
+    }
+
+    nav a:hover {
+      background: var(--panel2);
+      color: white;
+    }
+
+    main {
+      max-width: 1150px;
+      margin: auto;
+      padding: 55px 18px 90px;
+    }
+
+    section { margin-bottom: 70px; }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin: 0 0 24px;
+      letter-spacing: -.03em;
+    }
+
+    h3 { margin-top: 0; }
+
+    .lead {
+      font-size: 1.12rem;
+      color: var(--muted);
+      max-width: 800px;
+    }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-      max-width: 1100px;
-      margin: 0 auto;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
     }
 
-    /* ---------- Card ---------- */
     .card {
-      background: var(--card);
-      border: 1px solid #202a38;
-      border-radius: 14px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-      padding: 0;
-      color: inherit;
-      font: inherit;
-      text-align: left;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: #33415c;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    }
-
-    .card-image {
-      position: relative;
-      aspect-ratio: 1 / 1;
-      display: grid;
-      place-items: center;
-    }
-
-    .card-image img { width: 82%; height: 82%; object-fit: contain; }
-
-    .card-id {
-      position: absolute;
-      top: 10px;
-      right: 12px;
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .card-body { padding: 14px 16px 16px; border-top: 1px solid #202a38; }
-
-    .card-body h3 { font-size: 18px; margin-bottom: 8px; }
-
-    /* ---------- Types ---------- */
-    .types { display: flex; gap: 6px; flex-wrap: wrap; }
-
-    .type-badge {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #0b0f16;
-      padding: 3px 10px;
-      border-radius: 999px;
-    }
-
-    /* ---------- Detail overlay ---------- */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(5, 8, 12, 0.82);
-      backdrop-filter: blur(4px);
-      display: none;
-      place-items: center;
-      padding: 24px;
-      z-index: 50;
-    }
-
-    .overlay.open { display: grid; }
-
-    .detail {
-      background: var(--card);
-      border: 1px solid #243145;
+      background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.035));
+      border: 1px solid var(--border);
       border-radius: 18px;
-      max-width: 720px;
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      overflow: hidden;
-      position: relative;
-      animation: pop 0.2s ease;
+      padding: 22px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.16);
     }
 
-    @keyframes pop { from { transform: scale(0.95); opacity: 0; } }
+    .card strong { color: white; }
+    .emoji { font-size: 2.2rem; }
 
-    .detail-close {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      border: none;
-      background: rgba(0, 0, 0, 0.45);
-      color: var(--text);
-      font-size: 14px;
-      cursor: pointer;
-      z-index: 5;
-    }
-
-    .detail-image {
-      aspect-ratio: 1 / 1;
-      position: relative;
-      display: grid;
-      place-items: center;
-      padding: 40px;
-    }
-
-    .detail-image img { width: 100%; height: 100%; object-fit: contain; }
-
-    .detail-body { padding: 32px 28px; display: flex; flex-direction: column; gap: 14px; }
-
-    .detail-body h2 { font-size: 32px; }
-
-    .detail-desc { color: var(--muted); line-height: 1.5; }
-
-    .detail-stats { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
-    .detail-stats li {
-      background: #1b2230;
-      border-radius: 10px;
-      padding: 10px 14px;
+    .stat {
       display: flex;
-      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: rgba(124,92,255,.16);
+      color: #dcd6ff;
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    .monster {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .monster::after {
+      content: "⚙️";
+      position: absolute;
+      right: 12px;
+      top: 8px;
+      opacity: .12;
+      font-size: 4rem;
+    }
+
+    .board {
+      background: #11182b;
+      border: 2px dashed rgba(255,255,255,.16);
+      border-radius: 20px;
+      padding: 22px;
+      overflow-x: auto;
+    }
+
+    .path {
+      display: flex;
+      gap: 10px;
+      min-width: 900px;
       align-items: center;
     }
 
-    .detail-stats span { color: var(--muted); font-size: 13px; }
+    .case {
+      width: 74px;
+      height: 74px;
+      flex: 0 0 74px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-weight: 800;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      font-size: .85rem;
+    }
 
-    .detail-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: auto; }
+    .case.start { background: rgba(53,208,127,.2); }
+    .case.battle { background: rgba(255,93,115,.18); }
+    .case.garage { background: rgba(255,173,66,.18); }
+    .case.mystery { background: rgba(124,92,255,.2); }
+    .case.arena { background: rgba(0,212,255,.18); }
 
-    .btn { border: none; border-radius: 10px; padding: 10px 16px; font-weight: 700; cursor: pointer; color: #0b0f16; }
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 15px;
+    }
 
-    .btn-ghost { background: transparent; border: 1px solid #33415c; color: var(--text); }
+    .step {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 15px;
+      align-items: start;
+    }
 
-    /* ---------- Footer ---------- */
-    .footer { text-align: center; padding: 20px; border-top: 1px solid #1f2734; color: var(--muted); font-size: 13px; }
+    .step::before {
+      content: counter(step);
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), #4a9cff);
+      font-weight: 900;
+      font-size: 1.2rem;
+    }
 
-    .footer a { color: var(--accent); text-decoration: none; }
+    .rule {
+      background: var(--panel);
+      border-left: 4px solid var(--accent);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
 
-    .footer a:hover { text-decoration: underline; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border-radius: 16px;
+      overflow: hidden;
+    }
 
-    /* ---------- Mobile ---------- */
-    @media (max-width: 640px) {
-      .detail { grid-template-columns: 1fr; max-height: 90vh; overflow-y: auto; }
-      .detail-image { aspect-ratio: 1 / 1; }
-      .hero h1 { font-size: 32px; }
+    th, td {
+      padding: 13px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background: var(--panel2);
+      color: white;
+    }
+
+    .winner {
+      text-align: center;
+      padding: 35px 20px;
+      border: 1px solid rgba(255,215,100,.25);
+      background: linear-gradient(135deg, rgba(255,215,100,.12), rgba(124,92,255,.12));
+      border-radius: 22px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 35px 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    code {
+      background: rgba(0,0,0,.25);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 650px) {
+      header { min-height: 360px; }
+      main { padding-top: 35px; }
+      .card { padding: 18px; }
+      .step { grid-template-columns: 42px 1fr; }
+      .step::before { width: 42px; height: 42px; }
     }
   </style>
 </head>
+
 <body>
-  <header class="topbar">
-    <span class="logo">🤖 RobotMon</span>
+  <header>
+    <div class="hero">
+      <span class="badge">🎲 Jeu de plateau • 2 à 4 joueurs • 20–40 min</span>
+      <h1>ROBOT<br>MONSTERS</h1>
+      <p class="subtitle">
+        Explore, capture, améliore et fais combattre tes robots monstres.
+        Collectionne les meilleurs robots et deviens le Robot Master ultime !
+      </p>
+    </div>
   </header>
 
+  <nav>
+    <div class="nav-inner">
+      <a href="#but">🎯 But</a>
+      <a href="#plateau">🗺️ Plateau</a>
+      <a href="#robots">🤖 Robots</a>
+      <a href="#capture">🎯 Capture</a>
+      <a href="#combat">⚔️ Combat</a>
+      <a href="#garage">🛠️ Garage</a>
+      <a href="#mystere">❓ Mystère</a>
+      <a href="#arenes">🏆 Arènes</a>
+      <a href="#victoire">👑 Victoire</a>
+    </div>
+  </nav>
+
   <main>
-    <div class="hero">
-      <h1>RobotMon</h1>
-      <p>Explore la collection de petits robots monstres</p>
-    </div>
-    <div class="about">
-      <p>
-        Nous aimerions que ce projet reste <strong>Creative Commons</strong> : chacun est
-        libre de partager et de réutiliser le concept Botmon.
+    <section id="but">
+      <h2>🎯 Le but du jeu</h2>
+      <p class="lead">
+        Chaque joueur devient un <strong>Robot Master</strong>. Parcours le plateau,
+        rencontre des Robot Monsters sauvages, capture-les, entraîne ton équipe et
+        affronte les gardiens des Arènes.
       </p>
-      <p>
-        Le projet en est à ses débuts — nous <strong>cherchons actuellement des idées</strong>
-        pour le développer. N'hésite pas à partager les tiennes sur GitHub : <a href="https://github.com/nazimboudeffa/robot-monsters" target="_blank" rel="noreferrer">https://github.com/nazimboudeffa/robot-monsters</a> !
+
+      <div class="grid">
+        <div class="card"><div class="emoji">🤖</div><h3>Collectionne</h3><p>Capture des Robot Monsters différents pour construire ton équipe.</p></div>
+        <div class="card"><div class="emoji">⚔️</div><h3>Combats</h3><p>Utilise tes robots et leurs pouvoirs pour battre les adversaires.</p></div>
+        <div class="card"><div class="emoji">🛠️</div><h3>Améliore</h3><p>Répare tes robots et augmente leurs statistiques au Garage.</p></div>
+        <div class="card"><div class="emoji">👑</div><h3>Deviens champion</h3><p>Le premier joueur à obtenir 5 Étoiles de Champion gagne !</p></div>
+      </div>
+    </section>
+
+    <section id="plateau">
+      <h2>🗺️ Fabriquer le plateau</h2>
+      <p class="lead">
+        Pas besoin d'imprimante : dessine simplement environ <strong>30 cases</strong>
+        sur une feuille. Fais un parcours en serpent et mélange les différents types de cases.
       </p>
-    </div>
-    <div class="grid" id="grid"></div>
+
+      <div class="board">
+        <div class="path">
+          <div class="case start">DÉPART</div>
+          <div class="case">🟢<br>SAUVAGE</div>
+          <div class="case battle">🤖<br>MONSTER</div>
+          <div class="case battle">⚔️<br>COMBAT</div>
+          <div class="case garage">🛠️<br>GARAGE</div>
+          <div class="case mystery">❓<br>MYSTÈRE</div>
+          <div class="case">🟢<br>SAUVAGE</div>
+          <div class="case battle">⚔️<br>COMBAT</div>
+          <div class="case arena">🏆<br>ARÈNE</div>
+          <div class="case">➕<br>...</div>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top:18px">
+        <div class="card"><strong>🟢 Case Sauvage</strong><p>Lance 1 dé pour déterminer si tu rencontres un robot.</p></div>
+        <div class="card"><strong>🤖 Case Monster</strong><p>Combats immédiatement un Robot Monster sauvage.</p></div>
+        <div class="card"><strong>⚔️ Case Combat</strong><p>Défie un autre joueur.</p></div>
+        <div class="card"><strong>🛠️ Case Garage</strong><p>Répare ou améliore un robot.</p></div>
+        <div class="card"><strong>❓ Case Mystère</strong><p>Lance le dé et découvre un événement.</p></div>
+        <div class="card"><strong>🏆 Case Arène</strong><p>Tente de battre le gardien et gagne une Étoile.</p></div>
+      </div>
+    </section>
+
+    <section id="robots">
+      <h2>🤖 Les Robot Monsters</h2>
+      <p class="lead">Chaque robot possède seulement 3 caractéristiques : PV, ATK et Rareté.</p>
+
+      <div class="grid">
+        <article class="card monster">
+          <div class="emoji">🔥</div>
+          <h3>PYROBOT</h3>
+          <p>Un robot de feu équipé d'un énorme bras lance-flammes.</p>
+          <div class="stat"><span class="pill">❤️ 6 PV</span><span class="pill">⚔️ 3 ATK</span><span class="pill">⭐ Rare 2</span></div>
+          <p><strong>Pouvoir :</strong> Surchauffe — sur un 6 naturel, inflige 2 dégâts.</p>
+        </article>
+
+        <article class="card monster">
+          <div class="emoji">⚡</div>
+          <h3>VOLTIK</h3>
+          <p>Petit robot électrique incroyablement rapide.</p>
+          <div class="stat"><span class="pill">❤️ 5 PV</span><span class="pill">⚔️ 4 ATK</span><span class="pill">⭐ Rare 3</span></div>
+          <p><strong>Pouvoir :</strong> Turbo — sur un 6, relance immédiatement.</p>
+        </article>
+
+        <article class="card monster">
+          <div class="emoji">🌿</div>
+          <h3>FERROFLOR</h3>
+          <p>Robot végétal couvert d'une armure métallique.</p>
+          <div class="stat"><span class="pill">❤️ 8 PV</span><span class="pill">⚔️ 2 ATK</span><span class="pill">⭐ Rare 2</span></div>
+          <p><strong>Pouvoir :</strong> Réparation — sur un 6, récupère 1 PV.</p>
+        </article>
+
+        <article class="card monster">
+          <div class="emoji">💧</div>
+          <h3>AQUABOT</h3>
+          <p>Un robot capable de projeter de puissants jets d'eau.</p>
+          <div class="stat"><span class="pill">❤️ 7 PV</span><span class="pill">⚔️ 3 ATK</span><span class="pill">⭐ Rare 2</span></div>
+          <p><strong>Pouvoir :</strong> Bouclier d'eau — sur un 6, annule 1 dégât.</p>
+        </article>
+
+        <article class="card monster">
+          <div class="emoji">👻</div>
+          <h3>GLITCHO</h3>
+          <p>Un robot fantôme qui semble avoir un bug permanent.</p>
+          <div class="stat"><span class="pill">❤️ 4 PV</span><span class="pill">⚔️ 5 ATK</span><span class="pill">⭐ Rare 4</span></div>
+          <p><strong>Pouvoir :</strong> Bug — sur un 6, l'adversaire relance son dé.</p>
+        </article>
+
+        <article class="card monster">
+          <div class="emoji">🐲</div>
+          <h3>MEGADRAGON-X</h3>
+          <p>Un Robot Monster légendaire extrêmement puissant.</p>
+          <div class="stat"><span class="pill">❤️ 10 PV</span><span class="pill">⚔️ 5 ATK</span><span class="pill">⭐ Rare 6</span></div>
+          <p><strong>Pouvoir :</strong> Rayon X — sur un 6, inflige 3 dégâts.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="capture">
+      <h2>🎯 Capturer un Robot Monster</h2>
+      <div class="steps">
+        <div class="step"><div class="rule"><strong>Rencontre :</strong> un Robot Monster sauvage apparaît.</div></div>
+        <div class="step"><div class="rule"><strong>Affaiblis-le :</strong> combats avec l'un de tes robots jusqu'à ce qu'il ait 3 PV ou moins.</div></div>
+        <div class="step"><div class="rule"><strong>Tente la capture :</strong> lance 1 dé. Plus le robot est faible, plus il est facile à capturer.</div></div>
+      </div>
+
+      <table style="margin-top:22px">
+        <thead><tr><th>PV du robot sauvage</th><th>Résultat nécessaire</th></tr></thead>
+        <tbody>
+          <tr><td>3 PV</td><td>🎲 6</td></tr>
+          <tr><td>2 PV</td><td>🎲 5 ou 6</td></tr>
+          <tr><td>1 PV</td><td>🎲 4, 5 ou 6</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="combat">
+      <h2>⚔️ Les combats</h2>
+      <div class="card">
+        <h3>Un combat = 1 dé + ATK</h3>
+        <p>
+          Chaque joueur choisit un Robot Monster et lance un dé.
+          Ajoute la statistique <strong>ATK</strong> de ton robot.
+          Le score le plus élevé gagne le round.
+        </p>
+        <p><strong>Le perdant perd 1 PV.</strong></p>
+        <p>
+          <strong>Exemple :</strong> Pyrobot possède 3 ATK et obtient 5.
+          Son score est donc <strong>5 + 3 = 8</strong>.
+          Si l'adversaire obtient 6 avec 2 ATK, il fait 8 : égalité !
+        </p>
+      </div>
+      <p class="lead" style="margin-top:18px">
+        💥 <strong>Règle spéciale :</strong> sur un 6 naturel, le robot peut utiliser son pouvoir spécial.
+      </p>
+    </section>
+
+    <section id="garage">
+      <h2>🛠️ Le Garage</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>🔧 Réparer</h3>
+          <p>Récupère <strong>2 PV</strong> sur l'un de tes robots.</p>
+        </div>
+        <div class="card">
+          <h3>⚙️ Améliorer</h3>
+          <p>Lance 1 dé :</p>
+          <ul>
+            <li>1–2 : aucune amélioration</li>
+            <li>3–4 : +1 PV maximum</li>
+            <li>5 : +1 ATK</li>
+            <li>6 : +1 ATK et +1 PV maximum</li>
+          </ul>
+          <p>Maximum : <strong>+2 ATK</strong> grâce aux améliorations.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="mystere">
+      <h2>❓ Cases Mystère</h2>
+      <table>
+        <thead><tr><th>Dé</th><th>Événement</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>💥 Panne ! Ton robot perd 1 PV.</td></tr>
+          <tr><td>2</td><td>🔋 Batterie ! Récupère 2 PV.</td></tr>
+          <tr><td>3</td><td>⚙️ Pièce détachée ! Gagne une amélioration gratuite.</td></tr>
+          <tr><td>4</td><td>🚀 Radar ! Avance de 3 cases.</td></tr>
+          <tr><td>5</td><td>🤖 Rencontre ! Rencontre immédiatement un Robot Monster.</td></tr>
+          <tr><td>6</td><td>🍀 SUPER CHANCE ! Relance le dé ou tente immédiatement une capture.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="arenes">
+      <h2>🏆 Les Arènes</h2>
+      <p class="lead">Il est conseillé de placer 3 Arènes sur le parcours.</p>
+
+      <div class="grid">
+        <div class="card"><h3>🟢 Rocktron</h3><p>❤️ 8 PV • ⚔️ 3 ATK</p></div>
+        <div class="card"><h3>🔵 Aqua-Titan</h3><p>❤️ 10 PV • ⚔️ 4 ATK</p></div>
+        <div class="card"><h3>🔴 Infern-X</h3><p>❤️ 12 PV • ⚔️ 5 ATK</p></div>
+      </div>
+
+      <p class="lead" style="margin-top:20px">
+        Bats le gardien d'une Arène pour gagner <strong>1 Étoile de Champion ⭐</strong>.
+      </p>
+    </section>
+
+    <section>
+      <h2>👥 Ton équipe</h2>
+      <div class="card">
+        <p>
+          Tu peux posséder autant de Robot Monsters que tu veux, mais ton équipe active
+          ne peut contenir que <strong>3 robots</strong>.
+        </p>
+        <p>
+          Tu peux modifier ton équipe lorsque tu arrives au Garage.
+        </p>
+      </div>
+    </section>
+
+    <section id="victoire">
+      <div class="winner">
+        <div class="emoji">👑</div>
+        <h2>La victoire !</h2>
+        <p>
+          Le premier joueur à obtenir <strong>5 Étoiles de Champion</strong> gagne.
+        </p>
+        <p>
+          ⭐ Pour obtenir la 5e étoile, il doit posséder au moins
+          <strong>3 Robot Monsters différents</strong>.
+        </p>
+        <h3>ROBOT MASTER CHAMPION ! 🏆🤖</h3>
+      </div>
+    </section>
+
+    <section>
+      <h2>⭐ Version simplifiée</h2>
+      <div class="card">
+        <p>Pour les plus jeunes, utilise ces règles :</p>
+        <ul>
+          <li>Chaque robot possède seulement des PV et une ATK.</li>
+          <li>Pas de pouvoirs spéciaux.</li>
+          <li>Pas d'améliorations.</li>
+          <li>Un robot à 2 PV ou moins est capturable sur 5 ou 6.</li>
+          <li>Le premier joueur qui possède 5 robots différents gagne.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>🚀 Pour agrandir le jeu</h2>
+      <div class="grid">
+        <div class="card">🧬 <strong>Évolutions</strong><p>Fais évoluer tes robots après certains combats.</p></div>
+        <div class="card">🎴 <strong>Cartes d'objets</strong><p>Ajoute des bonus, soins et équipements.</p></div>
+        <div class="card">💥 <strong>Fusions</strong><p>Combine deux robots pour créer une machine unique.</p></div>
+        <div class="card">👑 <strong>Boss légendaires</strong><p>Ajoute des ennemis beaucoup plus puissants.</p></div>
+        <div class="card">🏟️ <strong>Tournois</strong><p>Organise des combats entre joueurs.</p></div>
+        <div class="card">✏️ <strong>Créations</strong><p>Invente tes propres Robot Monsters avec leurs stats et pouvoirs.</p></div>
+      </div>
+    </section>
   </main>
 
-  <footer class="footer">
-    <p>
-      Le concept RobotMon est sous licence
-      <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noreferrer">
-        Creative Commons CC0 (domaine public)
-      </a>.
-    </p>
+  <footer>
+    <strong>🤖 ROBOT MONSTERS</strong><br>
+    Un jeu de plateau maison à créer, modifier et partager.
   </footer>
-
-  <div class="overlay" id="overlay">
-    <div class="detail">
-      <button class="detail-close" onclick="closeDetail()">✕</button>
-      <div class="detail-image" id="detailImage"></div>
-      <div class="detail-body" id="detailBody"></div>
-    </div>
-  </div>
-
-  <script>
-    const TYPE_COLORS = {
-      air: '#7cc7ff',
-      fire: '#ff5a3c',
-      plant: '#58c95c',
-      water: '#4f9dff',
-      electric: '#ffd23c'
-    }
-
-    const robots = [
-      {
-        id: 1,
-        name: 'Aerobot',
-        types: ['air'],
-        image: 'assets/2d/Meshy_AI_robot-air-concept.png',
-        description:
-          "Ce petit droid volant aspire l'air pour se propulser dans le ciel. Ses rotors silencieux font de lui un éclaireur parfait."
-      },
-      {
-        id: 2,
-        name: 'Pyrobot',
-        types: ['fire'],
-        image: 'assets/2d/Meshy_AI_robot-fire-extract.png',
-        description:
-          "Son cœur de fusion chauffe à blanc. Quand Pyrobot s'énerve, des étincelles jaillissent de ses articulations."
-      },
-      {
-        id: 3,
-        name: 'Robotruffe',
-        types: ['plant'],
-        image: 'assets/2d/Meshy_AI_robot-plant-extract.png',
-        description:
-          "Recouvert de lianes recyclées, ce monstre végétal recharge ses batteries grâce à la photosynthèse."
-      },
-      {
-        id: 4,
-        name: 'Hydrobot',
-        types: ['water'],
-        image: 'assets/2d/Meshy_AI_robot-water-extract.png',
-        description:
-          "Ses circuits sont refroidis par un flux d'eau continu. Hydrobot transforme l'humidité de l'air en carburant."
-      }
-    ]
-
-    const grid = document.getElementById('grid')
-    const overlay = document.getElementById('overlay')
-
-    function typeBadges(types) {
-      return types
-        .map((t) => `<span class="type-badge" style="background:${TYPE_COLORS[t]}">${t}</span>`)
-        .join('')
-    }
-
-    function renderGrid() {
-      grid.innerHTML = robots
-        .map(
-          (r) => `
-        <button class="card" onclick="openDetail(${r.id})">
-          <div class="card-image" style="background: radial-gradient(circle at 30% 30%, ${TYPE_COLORS[r.types[0]]}55, #151a24 70%)">
-            <img src="${r.image}" alt="${r.name}" />
-            <span class="card-id">n°${String(r.id).padStart(3, '0')}</span>
-          </div>
-          <div class="card-body">
-            <h3>${r.name}</h3>
-            <div class="types">${typeBadges(r.types)}</div>
-          </div>
-        </button>`
-        )
-        .join('')
-    }
-
-    function openDetail(id) {
-      const r = robots.find((x) => x.id === id)
-      if (!r) return
-      document.getElementById('detailImage').innerHTML = `
-        <img src="${r.image}" alt="${r.name}" />
-      `
-      document.getElementById('detailImage').style.background =
-        `radial-gradient(circle at 30% 30%, ${TYPE_COLORS[r.types[0]]}55, #10151d 75%)`
-      document.getElementById('detailBody').innerHTML = `
-        <span class="card-id">n°${String(r.id).padStart(3, '0')}</span>
-        <h2>${r.name}</h2>
-        <div class="types">${typeBadges(r.types)}</div>
-        <p class="detail-desc">${r.description}</p>
-        <ul class="detail-stats">
-          <li><span>Énergie</span><strong>100</strong></li>
-          <li><span>Attaque</span><strong>65</strong></li>
-          <li><span>Défense</span><strong>60</strong></li>
-          <li><span>Vitesse</span><strong>80</strong></li>
-        </ul>
-        <div class="detail-nav">
-          <button class="btn btn-ghost" onclick="closeDetail()">← Retour</button>
-          <button class="btn" style="background:${TYPE_COLORS[r.types[0]]}" onclick="closeDetail()">Voir tous les robots →</button>
-        </div>
-      `
-      overlay.classList.add('open')
-    }
-
-    function closeDetail() {
-      overlay.classList.remove('open')
-    }
-
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) closeDetail()
-    })
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeDetail()
-    })
-
-    renderGrid()
-  </script>
 </body>
 </html>
